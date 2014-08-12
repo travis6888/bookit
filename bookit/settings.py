@@ -31,11 +31,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '360250540164-jqs8ikfu35rt2341got6vffh4v19vvfb.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Tr9XHh133KFmQncapPieMpIq'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '695052004438-eq4nbiiu00m6o0j3vun145q21vcoo1fk.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'HFs_k7g6ml38NKohwrzfi_ii'
 
 # SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [...]
-
+LOGIN_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 # Application definition
 

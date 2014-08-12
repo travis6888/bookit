@@ -9,6 +9,7 @@ def home(request):
     return render(request, 'home.html')
 
 
+
 def register(request):
     if request.method == 'POST':
         form = EmailUserCreationForm(request.POST)
