@@ -34,7 +34,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '695052004438-eq4nbiiu00m6o0j3vun145q21vcoo1fk.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'HFs_k7g6ml38NKohwrzfi_ii'
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [...]
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar']
 LOGIN_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 # Application definition
@@ -48,6 +48,15 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
+    'googleapiclient',
+    'uritemplate',
+    'oauth2client',
+    'oauthlib',
+    'urllib3',
+
+
+
+
 
     'social.apps.django_app.default',
 )
