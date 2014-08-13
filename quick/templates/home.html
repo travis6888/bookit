@@ -18,11 +18,13 @@
     <script src="{% static 'js/angular-google-maps.min.js' %}"></script>
 
         <script src="{% static 'js/calendar.js' %}"></script>
-
+    {% block extraheader %}
+    {% endblock extraheader %}
 
 
 </head>
 <body>
+<a href="{% url 'profile' %}">Profile Page</a>
 {% verbatim %}
 <div ng-app='myApplicationModule'>
 
