@@ -1,3 +1,4 @@
+oauth2client
 Django==1.6.5
 South==1.0
 oauthlib==0.6.3

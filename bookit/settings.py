@@ -53,11 +53,6 @@ INSTALLED_APPS = (
     'oauth2client',
     'oauthlib',
     'urllib3',
-
-
-
-
-
     'social.apps.django_app.default',
 )
 

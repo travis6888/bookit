@@ -15,7 +15,9 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': 'home'}, name='logout'),
 
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'^movie/$', 'quick.views.movie', name='movie'),
+    url(r'^profile/$', 'quick.views.profile', name='profile'),
 )
+
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
