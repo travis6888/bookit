@@ -35,7 +35,7 @@ map.controller('eventController', function ($scope, $http) {
 
         $http({
             method: 'jsonp',
-            url: 'https://www.eventbrite.com/json/event_search?&app_key=X6ZAAG773BOUH4DJOR',
+            url: 'https://www.eventbrite.com/json/event_search?&app_key=VMJ33HPKLUJ3INR7ASCM',
             params: {
 
                 keywords: searched,
