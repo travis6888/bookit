@@ -23,6 +23,8 @@
 </head>
 
 <body>
+
+
 <nav>
     {% if not user.is_authenticated %}
         <a href="{% url "social:begin" "google-oauth2" %}">Google Login</a>
@@ -30,6 +32,8 @@
         Hi {{ user.username }}! | <a href="{% url 'profile' %}">Profile Page</a>
     {% endif %}
 </nav>
+
+{#<button class="btn btn-xl profile" da#}
 
 {% block content %}
 
