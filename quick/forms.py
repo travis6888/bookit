@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.forms import ModelMultipleChoiceField
+from quick.models import Interest, Profile
 
 __author__ = 'Travis'
 
@@ -28,3 +30,9 @@ class EmailUserCreationForm(UserCreationForm):
             raise forms.ValidationError(
                 self.error_messages['duplicate_username'],
                 code='duplicate_username',)
+
+
+class ProfileCreationForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ['oauth_token', 'email']

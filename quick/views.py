@@ -17,10 +17,13 @@ from googleapiclient.discovery import build
 import httplib2
 from oauth2client.client import AccessTokenCredentials
 from requests import get
-from quick.forms import EmailUserCreationForm
+from quick.forms import EmailUserCreationForm, ProfileCreationForm
 
 
 # @login_required
+from quick.models import Profile
+
+
 def home(request):
 
     return render(request, 'home.html')
@@ -31,21 +34,19 @@ def profile(request):
     user_social_auth = request.user.social_auth.filter(provider='google-oauth2').first()
     access_token = user_social_auth.extra_data['access_token']
     calID=user_social_auth.uid
+    print calID
     credentials = AccessTokenCredentials(access_token, 'my-user-agent/1.0')
     http= httplib2.Http()
     http = credentials.authorize(http)
     service = build(serviceName='calendar', version='v3', http=http, developerKey='HFs_k7g6ml38NKohwrzfi_ii')
     current_datetime = datetime.datetime.now().isoformat()[:-3] + 'Z'
     calendar2 = service.events().list(calendarId=calID, timeMin=current_datetime, singleEvents=True, orderBy='startTime').execute()
-
-
-
+    # Profile.objects.create(email=calID)
     greater_than_three = []
     for i in range(len(calendar2['items'])-1):
         next_start = calendar2['items'][i + 1]['start']['dateTime']
         current_end = calendar2['items'][i]['end']['dateTime']
         # print current_end
-
         dateTime_end = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
         dateTime_start = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
         difference = dateTime_start - dateTime_end
@@ -58,12 +59,29 @@ def profile(request):
                 'difference': difference,
             }
             greater_than_three.append(freeInfo)
-
         else:
             print 'no'
     print greater_than_three
     return render(request, 'profile.html', {'calendar_json': json.dumps(calendar2)})
 
+def create_profile(request):
+    user_social_auth = request.user.social_auth.filter(provider='google-oauth2').first()
+    access_token = user_social_auth.extra_data['access_token']
+    calID=user_social_auth.uid
+    if request.method == "POST":
+
+        form = ProfileCreationForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.email =calID
+            profile.oauth_token = access_token
+            profile.save()
+            form.save_m2m()
+            return redirect('home')
+    else:
+        form = ProfileCreationForm()
+    data = {'form': form}
+    return render(request, 'create_profile.html', data)
 
 def register(request):
     if request.method == 'POST':
