@@ -20,14 +20,16 @@ $.ajax({
 
 //eventbrite api call works
 $.ajax({
-        url: 'https://www.eventbriteapi.com/v3/events/?city=Denver&token=VMJ33HPKLUJ3INR7ASCM',
+        url: 'https://www.eventbriteapi.com/v3/events/search/?popular=on&sort_by=date&location.within=25mi&location.latitude=37.790964500000000000&location.longitude=-122.401688400000010000&token=VMJ33HPKLUJ3INR7ASCM',
         type: 'GET',
         dataType: 'json',
-       success: function(movie_response) {
-            console.log(movie_response);
-
+       success: function(response) {
+            console.log(response);
+           var eventbriteArray = response.events;
         },
         error: function(error_response) {
             console.log(error_response);
         }
     });
+
+
