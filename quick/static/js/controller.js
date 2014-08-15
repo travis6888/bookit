@@ -64,62 +64,62 @@ map.controller('eventController', function ($scope, $http) {
 //angular.module('appMaps', ['google-maps'])
 
 
-//map.controller('eventController', function ($scope, $http, EventService) {
-//
-//    $scope.search = function (searched, city) {
-//        $scope.eventslist = [];
-//        longitudelist =[];
-//        latitudelist =[];
-//
-//        $http({
-//            methond: 'jsonp',
-//            url: 'https://www.eventbriteapi.com/v3/events/search/',
-//            params: {
-//                token: 'VMJ33HPKLUJ3INR7ASCM',
-//                q: searched + '&' + city,
-//                popular: true
-//
-//
-//            }
-//        }).success(function (data) {
-//            console.log(data);
-//        }).error(function (error) {
-//            console.log(error)
-//        }).then(function (promise) {
-//            for (var i = 0; i < promise.data.events.length; i++) {
-//                console.log(promise.data.events[i].category);
-////                console.log(promise.data.events[i].venue.latitude);
-////                console.log(promise.data.events[i].venue.longitude);
-//
-//                $scope.eventslist.push(promise.data.events[i]);
-//                latitudelist.push(promise.data.events[i].venue.latitude);
-//                longitudelist.push(promise.data.events[i].venue.longitude);
-//
-//
-//
-//            }
-//            console.log(latitudelist);
-//            $scope.map = {center: {latitude: 37.89, longitude: -121.89 }, zoom: 4 };
-//            $scope.options = {scrollwheel: false};
-//            for(var j =0; j< latitudelist.length; j++){
-//            $scope.markers = {
-//                id: [j],
-//                coords: {
-//                    latitude: latitudelist[j],
-//                    longitude: longitudelist[j]
-//                }
-//            }
-//
-//            }
-//});
-//
-////            EventService.events = $scope.eventList;
-////            EventService.longitude = longitudelist;
-////            EventService.latitude = latitudelist;
-//
-//
-//    }
-//});
+map.controller('eventController', function ($scope, $http, EventService) {
+
+    $scope.search = function (searched, city) {
+        $scope.eventslist = [];
+        longitudelist =[];
+        latitudelist =[];
+
+        $http({
+            methond: 'jsonp',
+            url: 'https://www.eventbriteapi.com/v3/events/search/',
+            params: {
+                token: 'VMJ33HPKLUJ3INR7ASCM',
+                q: searched + '&' + city,
+                popular: true
+
+
+            }
+        }).success(function (data) {
+            console.log(data);
+        }).error(function (error) {
+            console.log(error)
+        }).then(function (promise) {
+            for (var i = 0; i < promise.data.events.length; i++) {
+                console.log(promise.data.events[i].category);
+//                console.log(promise.data.events[i].venue.latitude);
+//                console.log(promise.data.events[i].venue.longitude);
+
+                $scope.eventslist.push(promise.data.events[i]);
+                latitudelist.push(promise.data.events[i].venue.latitude);
+                longitudelist.push(promise.data.events[i].venue.longitude);
+
+
+
+            }
+            console.log(latitudelist);
+            $scope.map = {center: {latitude: 37.89, longitude: -121.89 }, zoom: 4 };
+            $scope.options = {scrollwheel: false};
+            for(var j =0; j< latitudelist.length; j++){
+            $scope.markers = {
+                id: [j],
+                coords: {
+                    latitude: latitudelist[j],
+                    longitude: longitudelist[j]
+                }
+            }
+
+            }
+});
+
+//            EventService.events = $scope.eventList;
+//            EventService.longitude = longitudelist;
+//            EventService.latitude = latitudelist;
+
+
+    }
+});
 
 map.controller('mainCtrl', function ($scope, $log, EventService) {
     $scope.mapped = function () {

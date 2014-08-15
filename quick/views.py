@@ -6,6 +6,7 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.formats import localize
+from django.views.decorators.csrf import csrf_exempt
 import googleapiclient
 from googleapiclient.http import HttpRequest
 
@@ -15,6 +16,7 @@ from googleapiclient import http
 from googleapiclient.discovery import build
 import httplib2
 from oauth2client.client import AccessTokenCredentials
+from requests import get
 from quick.forms import EmailUserCreationForm
 
 
@@ -36,19 +38,20 @@ def profile(request):
     current_datetime = datetime.datetime.now().isoformat()[:-3] + 'Z'
     calendar2 = service.events().list(calendarId=calID, timeMin=current_datetime, singleEvents=True, orderBy='startTime').execute()
 
+
+
     greater_than_three = []
-    i = 0
-    while i < len(calendar2['items'])-1:
+    for i in range(len(calendar2['items'])-1):
         next_start = calendar2['items'][i + 1]['start']['dateTime']
         current_end = calendar2['items'][i]['end']['dateTime']
+        # print current_end
 
         dateTime_end = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
         dateTime_start = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
         difference = dateTime_start - dateTime_end
-        print difference
-        i+=1
+        # print difference
         if difference >= datetime.timedelta(hours=3):
-            print 'yes'
+            # print 'yes'
             freeInfo = {
                 'event': calendar2['items'][i]['summary'],
                 'end': current_end,
@@ -58,8 +61,7 @@ def profile(request):
 
         else:
             print 'no'
-        print greater_than_three
-
+    print greater_than_three
     return render(request, 'profile.html', {'calendar_json': json.dumps(calendar2)})
 
 
@@ -77,3 +79,40 @@ def register(request):
     return render(request, "registration/register.html", {
         'form': form,
     })
+
+
+def eventuful_api():
+    city='san francisco'
+    eventful_url = 'http://api.eventful.com/json/events/search?'
+    eventful_params = {
+        'app_key': 'pXS5JztFCZDmbxbG',
+        'keywords': 'music',
+        'loaction': city,
+        'date': 'Future'
+    }
+
+    eventful_resp = get(url=eventful_url, params=eventful_params)
+    print eventful_resp.text
+
+
+def eventbrite_api():
+    city = 'san fransciso'
+    eventbrite_url='https://www.eventbriteapi.com/v3/events/search/?'
+    eventbrite_params = {
+        "token": 'VMJ33HPKLUJ3INR7ASCM',
+        'venue.city': city
+    }
+    eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
+    print eventbrite_resp.url
+    eventbrite_data = json.loads(eventbrite_resp.text)
+    print eventbrite_data
+
+
+def trail_api():
+    city = 'San+Jose'
+    activity = 'hiking'
+    url = ('https://outdoor-data-api.herokuapp.com/api.json?api_key=e65652575b4c95b8d78fae0621bf7428&q[city_eq]={}&q[activities_activity_type_name_cont]={}&q[radius]=30'.format(city, activity))
+    resp = get(url=url)
+    data = json.loads(resp.text)
+    print data
+    print resp.url
