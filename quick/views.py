@@ -9,6 +9,7 @@ from django.utils.formats import localize
 from django.views.decorators.csrf import csrf_exempt
 import googleapiclient
 from googleapiclient.http import HttpRequest
+from pyzipcode import ZipCodeDatabase
 
 
 # Create your views here.
@@ -55,8 +56,9 @@ def profile(request):
             # print 'yes'
             freeInfo = {
                 'event': calendar2['items'][i]['summary'],
-                'end': current_end,
-                'difference': difference,
+                'free_time_start': current_end,
+                'free_time_end': next_start,
+                'free_time_amount': difference,
             }
             greater_than_three.append(freeInfo)
         else:
@@ -75,6 +77,7 @@ def create_profile(request):
             profile = form.save(commit=False)
             profile.email =calID
             profile.oauth_token = access_token
+            profile.user = request.user
             profile.save()
             form.save_m2m()
             return redirect('home')
@@ -113,7 +116,10 @@ def eventuful_api():
     print eventful_resp.text
 
 
-def eventbrite_api():
+def eventbrite_api(request):
+    profile = Profile.objects.get(user=request.user)
+    interests = profile.interests
+    print interests
     city = 'san fransciso'
     eventbrite_url='https://www.eventbriteapi.com/v3/events/search/?'
     eventbrite_params = {
@@ -134,3 +140,31 @@ def trail_api():
     data = json.loads(resp.text)
     print data
     print resp.url
+
+
+def api_test(request):
+    profile = Profile.objects.get(user=request.user)
+    interests = profile.interests.all()
+    zcdb = ZipCodeDatabase()
+    zipcode = zcdb[profile.zipcode]
+    eventbrite_list = []
+    # for interest in interests:
+    #     print str(interest.interests)
+    eventbrite_url='https://www.eventbriteapi.com/v3/events/search/?'
+    eventbrite_params = {
+    "token": 'VMJ33HPKLUJ3INR7ASCM',
+    'popular': True,
+    # 'q': str(interest.interests),
+    'location.latitude': zipcode.latitude,
+    'location.longitude': zipcode.longitude,
+    'location.within': '20mi',
+    'start_date.range_start': '2014-08-16T10:00:14Z',
+    'start_date.range_end': '2014-08-24T10:00:14Z'
+    }
+    eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
+    print eventbrite_resp.url
+    eventbrite_data = json.loads(eventbrite_resp.text)
+    eventbrite_list.append(eventbrite_data)
+    print eventbrite_data
+
+    return render(request, 'api_test.html')
