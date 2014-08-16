@@ -50,20 +50,21 @@ class Event(models.Model):
     description = models.TextField(max_length=8000, null=True, blank=True)
     latitude = models.FloatField(max_length=100, null=True, blank=True)
     longitude = models.FloatField(max_length=100, null=True, blank=True)
-    start_time = models.DateTimeField(null=True, blank=True)
-    end_time = models.DateTimeField(null=True, blank=True)
-    picture = models.FileField(null=True, upload_to="event_photos", blank=True)
+    start_time = models.CharField(max_length=50, null=True, blank=True)
+    end_time = models.CharField(max_length=50, null=True, blank=True)
+    picture = models.URLField(null=True,blank=True)
+    event_url = models.URLField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.name, self.start_time
+        return "{} at {}".format(self.name, self.start_time)
 
-#
-# class FreeTimes(models.Model):
-#     user = models.ForeignKey(User, null=True, blank=True)
-#     free_time_start = models.CharField(max_length=50, null=True, blank=True)
-#     free_time_end = models.CharField(max_length=50, null=True, blank=True)
-#     free_time_amount = models.DateTimeField(null=True, blank=True)
-#     previous_event = models.CharField(max_length=200, null=True, blank=True)
-#
-#     def __unicode__(self):
-#         return "Free from {} to {}".format(self.free_time_start, self.free_time_end)
+
+class FreeTimes(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True)
+    free_time_start = models.CharField(max_length=50, null=True, blank=True)
+    free_time_end = models.CharField(max_length=50, null=True, blank=True)
+    free_time_amount = models.CharField(max_length=50, null=True, blank=True)
+    previous_event = models.CharField(max_length=200, null=True, blank=True)
+
+    def __unicode__(self):
+        return "Free from {} to {}".format(self.free_time_start, self.free_time_end)
