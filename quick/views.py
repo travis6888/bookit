@@ -22,7 +22,7 @@ from quick.forms import EmailUserCreationForm, ProfileCreationForm
 
 
 # @login_required
-from quick.models import Profile
+from quick.models import Profile, FreeTimes, Event
 
 
 def home(request):
@@ -60,6 +60,14 @@ def profile(request):
                 'free_time_end': next_start,
                 'free_time_amount': difference,
             }
+            event = (str(calendar2['items'][i]['summary']))
+            FreeTimes.objects.create(
+                user=request.user,
+                free_time_start=current_end,
+                free_time_end=next_start,
+                free_time_amount=difference,
+                previous_event=event
+            )
             greater_than_three.append(freeInfo)
         else:
             print 'no'
@@ -144,27 +152,45 @@ def trail_api():
 
 def api_test(request):
     profile = Profile.objects.get(user=request.user)
-    interests = profile.interests.all()
+    interests = profile.interests.filter(interests__in=['MUSIC', 'TECHNOLOGY', 'COMEDY', 'CAR', 'FOOD', 'SPORTS'])
     zcdb = ZipCodeDatabase()
     zipcode = zcdb[profile.zipcode]
     eventbrite_list = []
-    # for interest in interests:
-    #     print str(interest.interests)
+    free_times = FreeTimes.objects.filter(user=request.user)
     eventbrite_url='https://www.eventbriteapi.com/v3/events/search/?'
-    eventbrite_params = {
-    "token": 'VMJ33HPKLUJ3INR7ASCM',
-    'popular': True,
-    # 'q': str(interest.interests),
-    'location.latitude': zipcode.latitude,
-    'location.longitude': zipcode.longitude,
-    'location.within': '20mi',
-    'start_date.range_start': '2014-08-16T10:00:14Z',
-    'start_date.range_end': '2014-08-24T10:00:14Z'
-    }
-    eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
-    print eventbrite_resp.url
-    eventbrite_data = json.loads(eventbrite_resp.text)
-    eventbrite_list.append(eventbrite_data)
-    print eventbrite_data
+    for free_time in free_times:
+        start_time =  "{}Z".format(free_time.free_time_start[:-6])
+        end_time = "{}Z".format(free_time.free_time_end[:-6])
+        print "start" + start_time
+        print "end" + end_time
+        for interest in interests:
+            eventbrite_params = {
+            "token": 'VMJ33HPKLUJ3INR7ASCM',
+            'popular': True,
+            'q': str(interest.interests),
+            'location.latitude': zipcode.latitude,
+            'location.longitude': zipcode.longitude,
+            'location.within': '20mi',
+            'start_date.range_start': start_time,
+            'start_date.range_end': end_time
+            }
+            eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
+            eventbrite_data = json.loads(eventbrite_resp.text)
+            eventbrite_list.append(eventbrite_data)
+            print eventbrite_data['events']
+            for event in eventbrite_data['events']:
+                Event.objects.create(
+                    name=event['name']['text'],
+                    category=interest.interests,
+                    venue=event['venue']['name'],
+                    description=event['description']['text'],
+                    latitude=event['venue']['latitude'],
+                    longitude=event['venue']['longitude'],
+                    start_time=event['start']['utc'],
+                    end_time=event['end']['utc'],
+                    picture=event['logo_url'],
+                    event_url=event['url']
+                )
+    data = {'data': eventbrite_list}
 
-    return render(request, 'api_test.html')
+    return render(request, 'api_test.html', {'event_json': json.dumps(data)})
