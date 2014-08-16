@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^profile/$', 'quick.views.profile', name='profile'),
     url(r'^create_profile/$', 'quick.views.create_profile', name='create_profile'),
+    url(r'^api_test/$', 'quick.views.api_test', name='api_test'),
 )
 
 
