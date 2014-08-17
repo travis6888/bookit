@@ -55,9 +55,11 @@ class Event(models.Model):
     picture = models.URLField(null=True,blank=True)
     event_url = models.URLField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
+    start_dateTime = models.DateTimeField(null=True, blank=True)
+    end_dateTime = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
-        return "{} at {}".format(self.name, self.start_time)
+        return self.name
 
 
 class FreeTimes(models.Model):
@@ -66,6 +68,8 @@ class FreeTimes(models.Model):
     free_time_end = models.CharField(max_length=50, null=True, blank=True)
     free_time_amount = models.CharField(max_length=50, null=True, blank=True)
     previous_event = models.CharField(max_length=200, null=True, blank=True)
+    free_start_dateTime = models.DateTimeField(null=True, blank=True)
+    free_end_dateTime = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
         return "Free from {} to {}".format(self.free_time_start, self.free_time_end)

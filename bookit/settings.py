@@ -54,6 +54,9 @@ INSTALLED_APPS = (
     'oauthlib',
     'urllib3',
     'social.apps.django_app.default',
+    'dateutil',
+    'pytz',
+    'tzlocal'
 )
 
 MIDDLEWARE_CLASSES = (
