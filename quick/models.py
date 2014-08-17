@@ -54,6 +54,7 @@ class Event(models.Model):
     end_time = models.CharField(max_length=50, null=True, blank=True)
     picture = models.URLField(null=True,blank=True)
     event_url = models.URLField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
 
     def __unicode__(self):
         return "{} at {}".format(self.name, self.start_time)

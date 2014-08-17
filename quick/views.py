@@ -149,7 +149,8 @@ def api_test(request):
                     start_time=formatted_start,
                     end_time=formatted_end,
                     picture=event['logo_url'],
-                    event_url=event['url']
+                    event_url=event['url'],
+                    user=request.user
                 )
 
     data = {'data': eventbrite_list}
@@ -211,7 +212,8 @@ def meetup_api(request):
                         start_time=start_time,
                         end_time=end_time,
                         picture= 'http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
-                        event_url=event['event_url']
+                        event_url=event['event_url'],
+                        user=request.user
                 )
     data = {'data': meetup_list}
     return render(request, 'meetup_api.html', {'event_json': json.dumps(data)})
@@ -236,7 +238,8 @@ def trail_api(request):
                 latitude=outdoor['lat'],
                 longitude=outdoor['lon'],
                 description=outdoor['directions'],
-                category=activity)
+                category=activity,
+                user=request.user)
         trail_list.append(data)
 
     data = {'data': trail_list}
