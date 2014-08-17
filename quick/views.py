@@ -52,37 +52,49 @@ def profile(request):
     for i in range(len(calendar2['items'])-1):
         next_start = calendar2['items'][i + 1]['start']['dateTime']
         current_end = calendar2['items'][i]['end']['dateTime']
-        # print current_end
-        dateTime_end = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
-        dateTime_start = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
-        print dateTime_end
-        print dateTime_start
+        event = (str(calendar2['items'][i]['summary']))
+        curent_event_end_dateTime = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
+        next_event_start_dateTime = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
 
 
-        difference = dateTime_start - dateTime_end
-        # print difference
+        difference = next_event_start_dateTime - curent_event_end_dateTime
         if difference >= datetime.timedelta(hours=3):
-            # print 'yes'
-            freeInfo = {
-                'event': calendar2['items'][i]['summary'],
-                'free_time_start': current_end,
-                'free_time_end': next_start,
-                'free_time_amount': difference,
-            }
-            event = (str(calendar2['items'][i]['summary']))
-            FreeTimes.objects.create(
-                user=request.user,
-                free_time_start=current_end,
-                free_time_end=next_start,
-                free_time_amount=difference,
-                previous_event=event,
-                free_start_dateTime=dateTime_end,
-                free_end_dateTime=dateTime_start
-            )
-            greater_than_three.append(freeInfo)
-        else:
-            print 'no'
-    print greater_than_three
+            if difference >= datetime.timedelta(days=1):
+                hours_added = 12
+                for j in range(difference.days):
+                    if j == 0:
+                        free_start_dateTime = curent_event_end_dateTime
+                        free_end_dateTime = free_start_dateTime+relativedelta(hours=7)
+                        free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_amount = free_end_dateTime - free_start_dateTime
+                    else:
+                        free_start_dateTime = curent_event_end_dateTime + relativedelta(hours=hours_added)
+                        free_end_dateTime = free_start_dateTime + relativedelta(hours=14)
+                        free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_amount = free_end_dateTime - free_start_dateTime
+                    hours_added += 26
+
+                    FreeTimes.objects.create(
+                        user=request.user,
+                        free_time_start=free_time_start,
+                        free_time_end=free_time_end,
+                        free_time_amount=free_time_amount,
+                        previous_event=event,
+                        free_start_dateTime=free_start_dateTime,
+                        free_end_dateTime=free_end_dateTime
+                    )
+            else:
+                FreeTimes.objects.create(
+                    user=request.user,
+                    free_time_start=current_end,
+                    free_time_end=next_start,
+                    free_time_amount=difference,
+                    previous_event=event,
+                    free_start_dateTime=curent_event_end_dateTime,
+                    free_end_dateTime=next_event_start_dateTime
+                )
     return render(request, 'profile.html', {'calendar_json': json.dumps(calendar2)})
 
 def create_profile(request):
