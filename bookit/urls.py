@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^profile/$', 'quick.views.profile', name='profile'),
     url(r'^create_profile/$', 'quick.views.create_profile', name='create_profile'),
     url(r'^api_test/$', 'quick.views.api_test', name='api_test'),
+    url(r'^meetup_api/$', 'quick.views.meetup_api', name='meetup_api'),
+    url(r'^trail_api/$', 'quick.views.trail_api', name='trail_api'),
 )
 
 
