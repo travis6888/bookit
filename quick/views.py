@@ -233,21 +233,23 @@ def meetup_api(request):
                     end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
                 if event.get('venue'):
                     venue = event['venue']['name'] or event['venue']['city']
-                    Event.objects.create(
-                        name=event['name'],
-                        category=interest.interests,
-                        venue=venue,
-                        description=event['description'],
-                        latitude=event['venue']['lat'],
-                        longitude=event['venue']['lon'],
-                        start_time=start_time,
-                        end_time=end_time,
-                        picture='http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
-                        event_url=event['event_url'],
-                        user=request.user,
-                        start_dateTime=start_dateTime,
-                        end_dateTime=end_dateTime
-                )
+                    if event.get('description'):
+                        description = event['description'] or None
+                        Event.objects.create(
+                            name=event['name'],
+                            category=interest.interests,
+                            venue=venue,
+                            description=description,
+                            latitude=event['venue']['lat'],
+                            longitude=event['venue']['lon'],
+                            start_time=start_time,
+                            end_time=end_time,
+                            picture='http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
+                            event_url=event['event_url'],
+                            user=request.user,
+                            start_dateTime=start_dateTime,
+                            end_dateTime=end_dateTime
+                    )
     data = {'data': meetup_list}
     return render(request, 'meetup_api.html', {'event_json': json.dumps(data)})
 
