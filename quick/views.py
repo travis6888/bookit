@@ -2,6 +2,11 @@ import json
 # import datetime
 from time import mktime
 import datetime
+import pytz
+from pytz import timezone
+from tzlocal import get_localzone
+import dateutil.parser
+from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -47,31 +52,49 @@ def profile(request):
     for i in range(len(calendar2['items'])-1):
         next_start = calendar2['items'][i + 1]['start']['dateTime']
         current_end = calendar2['items'][i]['end']['dateTime']
-        # print current_end
-        dateTime_end = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
-        dateTime_start = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
-        difference = dateTime_start - dateTime_end
-        # print difference
+        event = (str(calendar2['items'][i]['summary']))
+        curent_event_end_dateTime = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
+        next_event_start_dateTime = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
+
+
+        difference = next_event_start_dateTime - curent_event_end_dateTime
         if difference >= datetime.timedelta(hours=3):
-            # print 'yes'
-            freeInfo = {
-                'event': calendar2['items'][i]['summary'],
-                'free_time_start': current_end,
-                'free_time_end': next_start,
-                'free_time_amount': difference,
-            }
-            event = (str(calendar2['items'][i]['summary']))
-            FreeTimes.objects.create(
-                user=request.user,
-                free_time_start=current_end,
-                free_time_end=next_start,
-                free_time_amount=difference,
-                previous_event=event
-            )
-            greater_than_three.append(freeInfo)
-        else:
-            print 'no'
-    print greater_than_three
+            if difference >= datetime.timedelta(days=1):
+                hours_added = 12
+                for j in range(difference.days):
+                    if j == 0:
+                        free_start_dateTime = curent_event_end_dateTime
+                        free_end_dateTime = free_start_dateTime+relativedelta(hours=7)
+                        free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_amount = free_end_dateTime - free_start_dateTime
+                    else:
+                        free_start_dateTime = curent_event_end_dateTime + relativedelta(hours=hours_added)
+                        free_end_dateTime = free_start_dateTime + relativedelta(hours=14)
+                        free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_amount = free_end_dateTime - free_start_dateTime
+                    hours_added += 26
+
+                    FreeTimes.objects.create(
+                        user=request.user,
+                        free_time_start=free_time_start,
+                        free_time_end=free_time_end,
+                        free_time_amount=free_time_amount,
+                        previous_event=event,
+                        free_start_dateTime=free_start_dateTime,
+                        free_end_dateTime=free_end_dateTime
+                    )
+            else:
+                FreeTimes.objects.create(
+                    user=request.user,
+                    free_time_start=current_end,
+                    free_time_end=next_start,
+                    free_time_amount=difference,
+                    previous_event=event,
+                    free_start_dateTime=curent_event_end_dateTime,
+                    free_end_dateTime=next_event_start_dateTime
+                )
     return render(request, 'profile.html', {'calendar_json': json.dumps(calendar2)})
 
 def create_profile(request):
@@ -139,6 +162,8 @@ def api_test(request):
             for event in eventbrite_data['events']:
                 formatted_start = event['start']['utc'][:-1] + '-7:00'
                 formatted_end = event['end']['utc'][:-1] + '-7:00'
+                datetime_start = dateutil.parser.parse(event['start']['utc'])
+                datetime_end = dateutil.parser.parse(event['end']['utc'])
                 Event.objects.create(
                     name=event['name']['text'],
                     category=interest.interests,
@@ -150,7 +175,9 @@ def api_test(request):
                     end_time=formatted_end,
                     picture=event['logo_url'],
                     event_url=event['url'],
-                    user=request.user
+                    user=request.user,
+                    start_dateTime=datetime_start,
+                    end_dateTime=datetime_end
                 )
 
     data = {'data': eventbrite_list}
@@ -163,6 +190,7 @@ def meetup_api(request):
     interests = profile.interests.filter(interests__in=['MUSIC', 'TECHNOLOGY', 'COMEDY', 'CAR', 'FOOD', 'SPORTS'])
     zcdb = ZipCodeDatabase()
     zipcode = zcdb[profile.zipcode]
+    tz=get_localzone()
     meetup_list = []
     meetup_category = {
         'MUSIC': 21,
@@ -181,40 +209,47 @@ def meetup_api(request):
         meetup_epoch_end=int(meetup_end.strftime('%s'))*1000
         for interest in interests:
             meetup_params = {
-                'key': '717627f78621629377f1776276441a',
+                'key': 'd5b2260514d3173733494e1a292e59',
                 'zip': profile.zipcode,
                 'category': meetup_category[interest.interests],
                 'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
-                'page': 5
+                'page': 1
             }
             meetup_resp = get(url=meetup_url, params=meetup_params)
             meetup_data = json.loads(meetup_resp.text)
             meetup_list.append(meetup_data)
             for event in meetup_data['results']:
                 epoch_time = event['time']
-                value = datetime.datetime.fromtimestamp(epoch_time/1000)
-                start_time=value.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                start_dateTime_obj = datetime.datetime.fromtimestamp(epoch_time/1000)
+                start_dateTime = tz.localize(start_dateTime_obj)
+                start_time = start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
                 if event.get('duration'):
                     end_time_epoch = event['time'] + event['duration']
-                    end_value = datetime.datetime.fromtimestamp(end_time_epoch/1000)
-                    end_time=end_value.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                    end_dateTime_obj = datetime.datetime.fromtimestamp(end_time_epoch/1000)
+                    end_dateTime = tz.localize(end_dateTime_obj)
+                    end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
                 else:
-                    end_time=value.strftime('%Y-%m-%dT%{}:%M:%S-07:00'.format('24'))
+                    end_dateTime = start_dateTime+relativedelta(hours=5)
+                    end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
                 if event.get('venue'):
                     venue = event['venue']['name'] or event['venue']['city']
-                    Event.objects.create(
-                        name=event['name'],
-                        category=interest.interests,
-                        venue=venue,
-                        description=event['description'],
-                        latitude=event['venue']['lat'],
-                        longitude=event['venue']['lon'],
-                        start_time=start_time,
-                        end_time=end_time,
-                        picture= 'http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
-                        event_url=event['event_url'],
-                        user=request.user
-                )
+                    if event.get('description'):
+                        description = event['description'] or None
+                        Event.objects.create(
+                            name=event['name'],
+                            category=interest.interests,
+                            venue=venue,
+                            description=description,
+                            latitude=event['venue']['lat'],
+                            longitude=event['venue']['lon'],
+                            start_time=start_time,
+                            end_time=end_time,
+                            picture='http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
+                            event_url=event['event_url'],
+                            user=request.user,
+                            start_dateTime=start_dateTime,
+                            end_dateTime=end_dateTime
+                    )
     data = {'data': meetup_list}
     return render(request, 'meetup_api.html', {'event_json': json.dumps(data)})
 
