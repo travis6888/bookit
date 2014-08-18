@@ -2,8 +2,6 @@ from django.contrib.auth.models import User
 
 from django.db import models
 
-from social.apps.django_app.default.models import UserSocialAuth
-
 
 class Interest(models.Model):
     INTERESTS = (
@@ -52,7 +50,7 @@ class Event(models.Model):
     longitude = models.FloatField(max_length=100, null=True, blank=True)
     start_time = models.CharField(max_length=50, null=True, blank=True)
     end_time = models.CharField(max_length=50, null=True, blank=True)
-    picture = models.URLField(null=True,blank=True)
+    picture = models.URLField(null=True, blank=True)
     event_url = models.URLField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     start_dateTime = models.DateTimeField(null=True, blank=True)

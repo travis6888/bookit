@@ -2,6 +2,7 @@ import json
 # import datetime
 from time import mktime
 import datetime
+from django.http import HttpResponse
 import pytz
 from pytz import timezone
 from tzlocal import get_localzone
@@ -133,6 +134,7 @@ def register(request):
     })
 
 
+@csrf_exempt
 def api_test(request):
     profile = Profile.objects.get(user=request.user)
     interests = profile.interests.filter(interests__in=['MUSIC', 'TECHNOLOGY', 'COMEDY', 'CAR', 'FOOD', 'SPORTS'])
@@ -183,8 +185,10 @@ def api_test(request):
     data = {'data': eventbrite_list}
 
     return render(request, 'api_test.html', {'event_json': json.dumps(data)})
+    # return HttpResponse(json.dumps(data), content_type='application/json')
 
 
+@csrf_exempt
 def meetup_api(request):
     profile = Profile.objects.get(user=request.user)
     interests = profile.interests.filter(interests__in=['MUSIC', 'TECHNOLOGY', 'COMEDY', 'CAR', 'FOOD', 'SPORTS'])
@@ -252,8 +256,9 @@ def meetup_api(request):
                     )
     data = {'data': meetup_list}
     return render(request, 'meetup_api.html', {'event_json': json.dumps(data)})
+    # return HttpResponse(json.dumps(data), content_type='application/json')
 
-
+@csrf_exempt
 def trail_api(request):
     profile = Profile.objects.get(user=request.user)
     interests = profile.interests.filter(interests__in=['HIKING', "BIKING", "TRAIL"])
@@ -279,3 +284,22 @@ def trail_api(request):
 
     data = {'data': trail_list}
     return render(request, 'trail_api.html', {'event_json': json.dumps(data)})
+    # return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+def bootstrap(request):
+    return render(request, "bootstrap.html")
+
+
+def matching(request):
+    free_times = FreeTimes.objects.filter(user=request.user)
+    events = Event.objects.filter(user=request.user)
+    matched_event = {'MUSIC':[], 'CAR': [], "TECHNOLOGY":[], "HIKING": [], "BIKING": [], "TRAIL": [], "COMEDY": [], "FOOD": [], "SPORTS": [] }
+    for free_time in free_times:
+        for event in events:
+            if event.start_dateTime and event.start_dateTime >= free_time.free_start_dateTime and free_time.free_end_dateTime:
+                matched_event[event.category].append(event)
+            else:
+                matched_event[event.category].append(event)
+    return render(request, 'bootstrap.html')
+

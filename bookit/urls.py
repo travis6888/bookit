@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     url(r'^api_test/$', 'quick.views.api_test', name='api_test'),
     url(r'^meetup_api/$', 'quick.views.meetup_api', name='meetup_api'),
     url(r'^trail_api/$', 'quick.views.trail_api', name='trail_api'),
+    url(r'^bootstrap/$', 'quick.views.bootstrap', name='bootstrap'),
+    url(r'^match/$', 'quick.views.matching', name='match')
+
 )
 
 

@@ -9,6 +9,7 @@
 
     <!--bootstrap js file-->
     <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 
     <!--bootstrap css-->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -33,7 +34,10 @@
     {% endif %}
 </nav>
 
-{#<button class="btn btn-xl profile" da#}
+<button class="btn btn-xl profileBtn">Profile</button>
+<div class="meetup"></div>
+<div class="trail"></div>
+<div class="eventbrite"></div>
 
 {% block content %}
 
