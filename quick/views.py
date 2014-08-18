@@ -10,7 +10,7 @@ import dateutil.parser
 from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.utils.formats import localize
 from django.views.decorators.csrf import csrf_exempt
 import googleapiclient
@@ -278,9 +278,11 @@ def trail_api(request):
                 latitude=outdoor['lat'],
                 longitude=outdoor['lon'],
                 description=outdoor['directions'],
+                picture="http://38.media.tumblr.com/e5c079497b3a6a338f6d7c9b90be871f/tumblr_n5wawiu3Lm1st5lhmo1_1280.jpg",
                 category=activity,
                 user=request.user)
         trail_list.append(data)
+
 
     data = {'data': trail_list}
     return render(request, 'trail_api.html', {'event_json': json.dumps(data)})
@@ -292,14 +294,20 @@ def bootstrap(request):
 
 
 def matching(request):
+    for row in Event.objects.all():
+        if Event.objects.filter(name=row.name).count() > 1:
+            row.delete()
     free_times = FreeTimes.objects.filter(user=request.user)
-    events = Event.objects.filter(user=request.user)
-    matched_event = {'MUSIC':[], 'CAR': [], "TECHNOLOGY":[], "HIKING": [], "BIKING": [], "TRAIL": [], "COMEDY": [], "FOOD": [], "SPORTS": [] }
+    events = Event.objects.filter(user=request.user).distinct()
+    matched_event = {'MUSIC':[], 'CAR': [], "TECHNOLOGY":[], "COMEDY": [], "HIKING": [], "BIKING":[], "TRAIL": [], "FOOD": [], "SPORTS": []}
     for free_time in free_times:
         for event in events:
             if event.start_dateTime and event.start_dateTime >= free_time.free_start_dateTime and free_time.free_end_dateTime:
-                matched_event[event.category].append(event)
+                if event not in matched_event[event.category]:
+                    matched_event[event.category].append(event)
             else:
-                matched_event[event.category].append(event)
-    return render(request, 'bootstrap.html')
+                if event not in matched_event[event.category]:
+                    matched_event[event.category].append(event)
+
+    return render(request, 'event_template.html', {'matched': matched_event})
 
