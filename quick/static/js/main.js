@@ -48,6 +48,21 @@ $(document).ready(function(){
            }
        });
    });
+    $('.eventBtn').on('click', function(){
+        $.ajax({
+            url: '/match/',
+            dataType: 'html',
+            type: 'GET',
+            success: function(reponse){
+                console.log(reponse);
+                $('.events').html(reponse);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+    });
+
 //    $('.carousel').carousel();
 
 });

@@ -8,14 +8,16 @@
 <body>{% block content %}
 <div class="container">
     <div class="row">
+       <div class="events">
+
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                 <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                 <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-{#                <li data-target="#carousel-example-generic" data-slide-to="2"></li>#}
-{##}
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+
             </ol>
         <div class="carousel-inner">
             <div class="item active">
@@ -58,6 +60,17 @@
             </div>
 
         </div>
+{#<div class="row">#}
+{#    {% for interest in matched %}#}
+{#    {{ interest }}#}
+{##}
+{#    {% for event in matched.iteritems %}#}
+{#    {{ event }}#}
+{#    {% endfor %}#}
+{#    {% endfor %}#}
+{##}
+{#</div>#}
+<button class="eventBtn"> click me</button>
 
 </div>
 
