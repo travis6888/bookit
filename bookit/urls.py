@@ -22,7 +22,8 @@ urlpatterns = patterns('',
     url(r'^trail_api/$', 'quick.views.trail_api', name='trail_api'),
     url(r'^bootstrap/$', 'quick.views.bootstrap', name='bootstrap'),
     url(r'^match/$', 'quick.views.matching', name='match'),
-    # url(r'^get_locations/$', 'quick.views.get_locations', name='get_locations'),
+    url(r'^post_event/$', 'quick.views.post_event', name='post_event'),
+
 
 )
 
