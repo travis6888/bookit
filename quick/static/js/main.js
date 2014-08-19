@@ -33,7 +33,7 @@ $(document).ready(function(){
            }
        });
        $.ajax({
-           url: "/api_test/",
+           url: "/eventbrite_api/",
            type: "GET",
            dataType: "json",
            success: function(response){
