@@ -27,8 +27,11 @@ $(document).ready(function(){
 
            },
            error: function(response){
-               console.log(response);
-                              $('.trail').append("<h3>nope</h3>")
+
+
+
+
+
 
            }
        });

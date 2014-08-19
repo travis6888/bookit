@@ -2,7 +2,7 @@ import json
 # import datetime
 from time import mktime
 import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import pytz
 from pytz import timezone
 from tzlocal import get_localzone
@@ -126,7 +126,7 @@ def create_profile(request):
             profile.user = request.user
             profile.save()
             form.save_m2m()
-            return redirect('home')
+            return HttpResponseRedirect('/loading/')
     else:
         form = ProfileCreationForm()
     data = {'form': form}
@@ -187,8 +187,8 @@ def eventbrite_api(request):
                     start_dateTime=datetime_start,
                     end_dateTime=datetime_end
                 )
-
-    return render(request, 'api_test.html')
+    success = {'success': 'success'}
+    return HttpResponse(json.dumps(success), content_type="application/json")
 
 
 
@@ -222,7 +222,7 @@ def meetup_api(request):
         meetup_epoch_end=int(meetup_end.strftime('%s'))*1000
         for interest in interests:
             meetup_params = {
-                'key': 'd5b2260514d3173733494e1a292e59',
+                'key': '6b5f26121d4265533b22117774561847',
                 'zip': profile.zipcode,
                 'category': meetup_category[interest.interests],
                 'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
@@ -252,7 +252,7 @@ def meetup_api(request):
                     end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
 
                 #Checks if event has venue and description
-                if event.get('venue'):
+                if event.get('venue') and event.get('time') and event.get('name'):
                     venue = event['venue']['name'] or event['venue']['city']
                     if event.get('description'):
                         description = event['description'] or None
@@ -271,8 +271,8 @@ def meetup_api(request):
                             start_dateTime=start_dateTime,
                             end_dateTime=end_dateTime
                     )
-
-    return render(request, 'meetup_api.html')
+    success = {'success': 'success'}
+    return HttpResponse(json.dumps(success), content_type="application/json")
 
 
 """Pulls biking, hiking, and trail related locations using Trail API"""
@@ -299,7 +299,8 @@ def trail_api(request):
                 category=activity,
                 user=request.user)
 
-    return render(request, 'trail_api.html')
+    success = {'success': 'success'}
+    return HttpResponse(json.dumps(success), content_type="application/json")
 
 
 def bootstrap(request):
@@ -367,5 +368,6 @@ def post_event(request):
         return HttpResponse(json.dumps(event_id), content_type='application/json')
 
 
-
+def loading(request):
+    return render(request, 'loading.html')
 
