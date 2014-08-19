@@ -96,6 +96,9 @@ def profile(request):
                     free_start_dateTime=curent_event_end_dateTime,
                     free_end_dateTime=next_event_start_dateTime
                 )
+    for row in FreeTimes.objects.filter(user=request.user):
+        if FreeTimes.objects.filter(free_start_dateTime=row.free_start_dateTime).count() > 1:
+            row.delete()
     return render(request, 'profile.html', {'calendar_json': json.dumps(calendar2)})
 
 def create_profile(request):
@@ -294,7 +297,7 @@ def bootstrap(request):
 
 
 def matching(request):
-    for row in Event.objects.all():
+    for row in Event.objects.filter(user=request.user):
         if Event.objects.filter(name=row.name).count() > 1:
             row.delete()
     free_times = FreeTimes.objects.filter(user=request.user)
