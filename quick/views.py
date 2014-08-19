@@ -315,5 +315,44 @@ def matching(request):
 
     return render(request, 'bootstrap.html', {'matched': matched_event})
 
+@csrf_exempt
+def post_event(request):
+    if request.method == 'POST':
+        event_id = json.loads(request.body)
+        event = Event.objects.get(pk=event_id)
+        # start_time =
+
+        event_info = {
+            "end": {
+                "dateTime": event.end_time
+            },
+
+            "start": {
+                'dateTime': event.start_time
+            },
+
+            "summary": event.name,
+            "location": event.venue,
+
+        }
+
+        # print event_info
+
+        user_social_auth = request.user.social_auth.filter(provider='google-oauth2').first()
+        access_token = user_social_auth.extra_data['access_token']
+        calID=user_social_auth.uid
+
+        credentials = AccessTokenCredentials(access_token, 'my-user-agent/1.0')
+        http= httplib2.Http()
+        http = credentials.authorize(http)
+        service = build(serviceName='calendar', version='v3', http=http, developerKey='HFs_k7g6ml38NKohwrzfi_ii')
+        created_event = service.events().insert(calendarId='primary', body=event_info).execute()
+
+
+        print "yes"
+
+        return HttpResponse(json.dumps(event_id), content_type='application/json')
+
+
 
 

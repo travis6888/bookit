@@ -76,4 +76,29 @@ $(document).ready(function(){
     });
 
 
+    $('.bookit').on('click', function(){
+        var event_id = $(this).data('id');
+        var eventInfo = JSON.stringify(event_id);
+        $(this).hide();
+        $(this).siblings('.bookedBtn').show();
+
+        $.ajax({
+            url: '/post_event/',
+            type: 'POST',
+            dataType: 'json',
+            data: eventInfo,
+            success: function(response){
+                console.log(response);
+
+
+            },
+            error: function(response){
+
+            }
+
+
+        })
+    })
+
+
 });
