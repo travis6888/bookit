@@ -1,79 +1,97 @@
-{% extends "home.html" %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-</head>
-<body>{% block content %}
-<div class="container">
-    <div class="row">
-       <div class="events">
+    <!--jquery files-->
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
 
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+    <!--bootstrap js file-->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 
-            </ol>
-        <div class="carousel-inner">
-            <div class="item active">
-                                       <h4 style="text-align: center">one</h4>
+    <!--bootstrap css-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/thumbnail-gallery.css' %}" rel="stylesheet">
+    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
 
-                <div class="carousel-caption">
+
+    <!--CSS files-->
+
+<body>
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        BookIt
+                    </a>
+                </li>
+                {% for key, values in matched.items %}
+
+                    {% if values|length > 0 %}
+                        <li>
+                            <a href="#{{ key }}">{{ key| lower| capfirst }}</a>
+
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <section id="contact" class="map">
+            <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                    src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+            <br/>
+            <small>
+                <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
+            </small>
+            </iframe>
+        </section>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="events">
+
+
+                <div class="event">
+
+                    {% for key, values in matched.items %}
+
+                        {% if values|length > 0 %}
+                            <div class="row eventGrid" id="{{ key }}" style="border: 1px solid #000000;">
+
+                            <h3>{{ key| lower| capfirst }}</h3>
+                        {% endif %}
+
+                    {% for  event in values %}
+                        <div class="col-lg-2  col-md-4 col-xs-6 thumb center-block">
+                            <p>Title {{ event.name }}</p>
+
+                            <p>Category {{ event.category| lower| capfirst }}</p>
+
+                            <p>Venue {{ event.venue }}</p>
+
+                            <p>Starts at: {{ event.start_dateTime| date:"DATETIME_FORMAT" }}</p>
+
+                            <p>Ends at: {{ event.end_dateTime| date:"DATETIME_FORMAT" }}</p>
+                        </div>
+                    {% endfor %}
+                    </div>
+
+
+                    {% endfor %}
 
                 </div>
-            </div>
-            <div class="item">
-                                       <h4 style="text-align: center">two</h4>
 
-                <div class="carousel-caption">
-
-                </div>
-            </div>
-            <div class="item">
-                                  <h4 style="text-align: center">three</h4>
-
-                <div class="carousel-caption">
-
-                </div>
-            </div>
-            <div class="item">
-                   <h4 style="text-align: center">four</h4>
-
-                <div class="carousel-caption">
-                </div>
             </div>
         </div>
+    </div>
 
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-            </div>
-
-        </div>
-{#<div class="row">#}
-{#    {% for interest in matched %}#}
-{#    {{ interest }}#}
-{##}
-{#    {% for event in matched.iteritems %}#}
-{#    {{ event }}#}
-{#    {% endfor %}#}
-{#    {% endfor %}#}
-{##}
-{#</div>#}
-<button class="eventBtn"> click me</button>
-
-</div>
-
-{% endblock %}
 </body>
 </html>

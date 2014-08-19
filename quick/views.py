@@ -309,5 +309,6 @@ def matching(request):
                 if event not in matched_event[event.category]:
                     matched_event[event.category].append(event)
 
-    return render(request, 'event_template.html', {'matched': matched_event})
+
+    return render(request, 'bootstrap.html', {'matched': matched_event})
 
