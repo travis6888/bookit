@@ -223,7 +223,7 @@ hr.small {
 /* Map */
 
 .map {
-    height: 500px;
+    height: 300px;
 }
 
 @media(max-width:768px) {
@@ -246,3 +246,7 @@ h1{
     background-color: #eeeeee;
 
 }
+
+/*#map-canvas{*/
+    /*height: 20%;*/
+/*}*/
