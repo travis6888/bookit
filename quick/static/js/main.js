@@ -53,7 +53,27 @@ $(document).ready(function(){
 
 
         })
-    })
+    });
+    $('.inviteSubmit').on('click', function(){
+        var friendsEmail = $('.friendEmail').val();
+        console.log(friendsEmail)
+        friendsEmail2 = JSON.stringify(friendsEmail);
+        $.ajax({
+            url: '/invite_friends/',
+            type: "POST",
+            dataType: "json",
+            data: friendsEmail2,
+            success: function(response){
+                console.log(response);
+            },
+            error: function(response){
+                console.log(response);
 
+            }
 
+        })
+    });
+    $('.loadEvents').on('click', function() {
+        window.location.replace("/loading/");
+    });
 });

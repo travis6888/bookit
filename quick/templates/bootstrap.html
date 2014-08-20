@@ -41,7 +41,6 @@
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmXQO4kik_QT8QPmzZ2_teiGUak9t1rQc">
     </script>
-{#    <script src="{% static 'js/maps.js' %}"></script>#}
 <body>
 <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
     <nav id="sidebar-wrapper">
@@ -68,6 +67,9 @@
                         </li>
                     {% endif %}
                 {% endfor %}
+                <li>
+                    <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
+                </li>
             </ul>
     </nav>
     <div class="container">
@@ -75,7 +77,22 @@
             <div id="map-canvas"></div>
         </section>
     </div>
+    <div class="modal fade invitedFriends-modal-sm" tabindex="-1" role="dialog" aria-labelledby="inviteSmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+
+            <div class="modal-content">
+                <h3 class="modal-header">Invite Your Friends by Email</h3>
+                <p>Separate Multiple Friends by Comma</p>
+                <form>
+                    <input class="friendEmail" type="text" placeholder="Enter Email">
+                    <button class="inviteSubmit" type="submit">Invite!</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
     <div class="container">
+
         <div class="row">
             <div class="events">
 
@@ -97,14 +114,16 @@
                             <p>Category {{ event.category| lower| capfirst }}</p>
 
                             <p>Venue {{ event.venue }}</p>
+                            {% if event.category !=  "BIKING" and event.category != "HIKING" and event.category != "TRAIL"  %}
+                                <p>Starts at: {{ event.start_dateTime| date:"DATETIME_FORMAT" }}</p>
 
-                            <p>Starts at: {{ event.start_dateTime| date:"DATETIME_FORMAT" }}</p>
-
-                            <p>Ends at: {{ event.end_dateTime| date:"DATETIME_FORMAT" }}</p>
+                                <p>Ends at: {{ event.end_dateTime| date:"DATETIME_FORMAT" }}</p>
 
 
-                            <button class="btn btn-xl bookit" data-id="{{ event.id }}">BookIt</button>
-                            <p class="bookedBtn">Booked</p>
+                                <button class="btn btn-xl bookit" data-id="{{ event.id }}">BookIt</button>
+
+                                <p class="bookedBtn">Booked</p>
+                        {% endif %}
                         </div>
                     {% endfor %}
                     </div>
@@ -143,7 +162,7 @@
                 map: map,
 {#                icon: image, #}
 {#                url: 'http://172.16.0.101:8882/zone/' + {{mark.id}},#}
-               title: '{{ event.name }}',
+               title: '{{ event.name }}'
             });
              marker['infowindow']  = new google.maps.InfoWindow({
                      content: "<h1>{{event.name}}</h1> <p>{{ event.start_time }} {{ event.end_time }}</p><p><a href={{ event.event_url }}>Event Site</a></p>"
