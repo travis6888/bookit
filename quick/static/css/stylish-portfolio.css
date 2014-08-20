@@ -345,7 +345,7 @@ html, body{
 
 }
 .loadingText{
-    color: #ffffff;
+    color: #000000;
 }
 /*#map-canvas{*/
     /*height: 20%;*/
