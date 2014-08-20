@@ -16,6 +16,7 @@ class Interest(models.Model):
         ('SPORTS', 'Sports'),)
     interests = models.CharField(max_length=10, choices=INTERESTS, null=True, blank=True)
 
+
     def __unicode__(self):
         return self.interests
 
@@ -26,6 +27,7 @@ class Profile(models.Model):
     zipcode = models.IntegerField(max_length=5, null=True, blank=True)
     email = models.CharField(max_length=100, null=True, blank=True)
     interests = models.ManyToManyField(Interest, null=True, blank=True)
+
 
     def __unicode__(self):
         return self.email
@@ -71,3 +73,14 @@ class FreeTimes(models.Model):
 
     def __unicode__(self):
         return "Free from {} to {}".format(self.free_time_start, self.free_time_end)
+
+
+class Friend(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True)
+    email = models.CharField(max_length=6000, null=True, blank=True)
+
+    def __unicode__(self):
+        return "{} friends {}".format(self.user, self.email)
+
+
+

@@ -2,6 +2,8 @@ import json
 # import datetime
 from time import mktime
 import datetime
+from django.contrib.auth.models import User
+from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseRedirect
 import pytz
 from pytz import timezone
@@ -25,7 +27,7 @@ import httplib2
 from oauth2client.client import AccessTokenCredentials
 from requests import get
 from quick.forms import EmailUserCreationForm, ProfileCreationForm
-from quick.models import Profile, FreeTimes, Event
+from quick.models import Profile, FreeTimes, Event, Friend
 
 
 def home(request):
@@ -38,7 +40,7 @@ def profile(request):
     pulled from there account. Records of free times are created based on the time in betweeen events"""
 
     # Pulls information from database about the user
-    user_social_auth = request.user.social_auth.filter(provider='google-oauth2').first()
+    user_social_auth = request.user.social_auth.get(provider='google-oauth2')
     access_token = user_social_auth.extra_data['access_token']
     calID=user_social_auth.uid
     credentials = AccessTokenCredentials(access_token, 'my-user-agent/1.0')
@@ -105,8 +107,9 @@ def profile(request):
                 )
 
     # Deletes any duplicate free times in database for current user
-    for row in FreeTimes.objects.filter(user=request.user):
-        if FreeTimes.objects.filter(free_start_dateTime=row.free_start_dateTime).count() > 1:
+    duplicate_freeTimes = FreeTimes.objects.filter(user=request.user)
+    for row in duplicate_freeTimes:
+        if duplicate_freeTimes.filter(free_start_dateTime=row.free_start_dateTime).count() > 1:
             row.delete()
     return render(request, 'profile.html')
 
@@ -311,8 +314,9 @@ def bootstrap(request):
 of their free times"""
 def matching(request):
     # Deletes any duplicate events from database for that specific user
-    for row in Event.objects.filter(user=request.user):
-        if Event.objects.filter(name=row.name).count() > 1:
+    event_delete = Event.objects.filter(user=request.user)
+    for row in event_delete:
+        if event_delete.filter(name=row.name).count() > 1:
             row.delete()
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
@@ -370,4 +374,30 @@ def post_event(request):
 
 def loading(request):
     return render(request, 'loading.html')
+
+# Finds events that match your friends recommended events
+def group_match(request):
+    matched = {}
+
+    # Loop through a list of your friends
+    for friend in Friend.objects.filter(user=request.user):
+        list = []
+        name_list = []
+        friend_user = User.objects.get(email=friend.email)
+
+        # Queries the DB for events that match both users
+        friend_user_events = Event.objects.filter(Q(user=request.user) | Q(user=friend_user))
+        duplicate_events = friend_user_events.values('name').annotate(Count('id')).order_by().filter(id__count__gt=1)
+        matching = friend_user_events.filter(name__in=[item['name'] for item in duplicate_events])
+
+        # Suggests events that have been recommended for both you and your friend
+        for event in matching:
+            if event.name not in name_list:
+                name_list.append(event.name)
+                list.append(event)
+        matched[friend_user] = list
+    print matched
+    return render(request, 'friend_match.html', {'matched': matched})
+
+
 

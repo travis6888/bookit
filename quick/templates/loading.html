@@ -1,4 +1,10 @@
+
 {% extends 'home.html' %}
+{% load staticfiles %}
+    {% block extraheader %}
+            <script src="{% static 'js/loading.js' %}"></script>
+
+    {% endblock extraheader %}
 {% block content %}
 
  <div class="center">

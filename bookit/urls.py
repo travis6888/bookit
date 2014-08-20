@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^match/$', 'quick.views.matching', name='match'),
     url(r'^post_event/$', 'quick.views.post_event', name='post_event'),
     url(r'^loading/$', 'quick.views.loading', name='loading'),
+    url(r'^friend_match/$', 'quick.views.group_match', name='friend_match'),
 
 
 )
