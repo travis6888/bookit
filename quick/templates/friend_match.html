@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="event">
+
+                    {% for key, values in matched.items %}
+
+                        {% if values|length > 0 %}
+                            <div class="row eventGrid" id="{{ key }}" style="border: 1px solid #000000;">
+
+                            <h3>{{ key| lower| capfirst }}</h3>
+                        {% endif %}
+
+                    {% for  event in values %}
+
+                        <div class="col-lg-2  col-md-4 col-xs-6 thumb center-block">
+                            <p>Title {{ event.name }}</p>
+
+                            <p>Category {{ event.category| lower| capfirst }}</p>
+
+                            <p>Venue {{ event.venue }}</p>
+
+                            <p>Starts at: {{ event.start_dateTime| date:"DATETIME_FORMAT" }}</p>
+
+                            <p>Ends at: {{ event.end_dateTime| date:"DATETIME_FORMAT" }}</p>
+
+
+                            <button class="btn btn-xl bookit" data-id="{{ event.id }}">BookIt</button>
+                            <p class="bookedBtn">Booked</p>
+                        </div>
+                    {% endfor %}
+                    </div>
+{% endfor %}
+
+
+
+</body>
+</html>

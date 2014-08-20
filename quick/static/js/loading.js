@@ -3,18 +3,18 @@
  */
 $(document).ready(function(){
     $.when(
-      $.ajax({
-           url: "/meetup_api/",
-           type: "GET",
-           dataType: "json",
-           success: function(response){
-               console.log(response);
-           },
-           error: function(response){
-               console.log(response);
-
-           }
-       }),
+//      $.ajax({
+//           url: "/meetup_api/",
+//           type: "GET",
+//           dataType: "json",
+//           success: function(response){
+//               console.log(response);
+//           },
+//           error: function(response){
+//               console.log(response);
+//
+//           }
+//       }),
        $.ajax({
            url: "/trail_api/",
            type: "GET",
