@@ -399,5 +399,19 @@ def group_match(request):
     print matched
     return render(request, 'friend_match.html', {'matched': matched})
 
+@csrf_exempt
+def invite_friends(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        friends = data.split(",")
+        print data
+        print friends
+        for friend in friends:
+            print friend
+            Friend.objects.create(user=request.user, email=friend)
+        success = {'success': 'success'}
+        return HttpResponse(json.dumps(success), content_type="application/json")
+
+
 
 
