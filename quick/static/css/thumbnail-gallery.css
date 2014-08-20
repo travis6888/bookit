@@ -43,3 +43,20 @@ footer {
     margin-top: 10px;
     background-color: #eee;
 }
+
+.hero-spacer {
+    margin-top: 50px;
+}
+
+.hero-feature {
+    margin-bottom: 30px;
+}
+
+.thumbnail{
+    height: 300px;
+}
+
+.bookit{
+    margin-top: 20px;
+
+}
