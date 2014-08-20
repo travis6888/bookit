@@ -56,7 +56,8 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'dateutil',
     'pytz',
-    'tzlocal'
+    'tzlocal',
+    'sendgrid',
 )
 
 MIDDLEWARE_CLASSES = (

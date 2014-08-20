@@ -7,6 +7,7 @@ from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseRedirect
 import pytz
 from pytz import timezone
+import sendgrid
 from tzlocal import get_localzone
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
@@ -407,10 +408,30 @@ def invite_friends(request):
         print data
         print friends
         for friend in friends:
-            print friend
             Friend.objects.create(user=request.user, email=friend)
+            print friend
+            sg = sendgrid.SendGridClient('travis6888', 'travis88')
+
+            message = sendgrid.Mail()
+            message.add_to(friend)
+            message.set_subject('You friend {} has invited you to BookIt'.format(request.user.first_name))
+            message.set_text('Click the following link to get started now! http://localhost:8000/')
+            message.set_html("<h2>Welcome to BookIt</h2><p><a href='http://localhost:8000/'>Click Here To Get Started</a></p>")
+            message.set_from(request.user.email)
+            status, msg = sg.send(message)
         success = {'success': 'success'}
         return HttpResponse(json.dumps(success), content_type="application/json")
+
+@csrf_exempt
+def add_friend(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        Friend.objects.create(user=request.user, email=data)
+        friend_delete = Friend.objects.filter(user=request.user)
+        for row in friend_delete:
+            if friend_delete.filter(email=row.email).count() > 1:
+                row.delete()
+        return redirect("/friend_match/")
 
 
 
