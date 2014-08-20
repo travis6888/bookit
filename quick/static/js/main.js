@@ -73,6 +73,26 @@ $(document).ready(function(){
 
         })
     });
+
+    $('.friendSubmit').on('click', function(){
+        var referrer = $('.friend').val();
+        console.log(referrer);
+        $('.friend').val('');
+        referrer = JSON.stringify(referrer);
+        $.ajax({
+            url: '/add_friend/',
+            type: 'POST',
+            dataType: 'html',
+            data: referrer,
+            success: function(response){
+                console.log(response)
+            },
+            error: function(response){
+                console.log(response)
+            }
+        })
+    });
+
     $('.loadEvents').on('click', function() {
         window.location.replace("/loading/");
     });

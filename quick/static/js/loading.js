@@ -41,13 +41,10 @@ $(document).ready(function(){
            }
        })
     ).then(function(){
-        console.log("winner");
-        $('.loadingText').html("<h3> Done</h3>");
-            window.location.replace("/match/");
+        window.location.replace("/match/");
     });
     eventbrite = function(){
         $('.loadingText').html("<h3> Loading Events from EventBrite</h3>");
-        console.log("change");
         setTimeout(function(){
             meetup();
 
@@ -56,8 +53,6 @@ $(document).ready(function(){
     };
     meetup = function(){
         $('.loadingText').html("<h3> Loading Events from Meetup</h3>");
-                console.log("change2");
-
         setTimeout(function(){
             trail();
 
@@ -66,16 +61,7 @@ $(document).ready(function(){
     };
     trail = function(){
         $('.loadingText').html("<h3> Loading Outdoor Events</h3>");
-                console.log("change3");
-
 
     };
     eventbrite();
-//    $('.loadindText').cycle(
-//    {
-//                    fx:     'fade',
-//                    speed:   500,
-//                    timeout: 3000,
-//                    pause:   1
-//                    });
 });

@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^loading/$', 'quick.views.loading', name='loading'),
     url(r'^friend_match/$', 'quick.views.group_match', name='friend_match'),
     url(r'^invite_friends/$', 'quick.views.invite_friends', name='invite_friends'),
+    url(r'^add_friend/$', 'quick.views.add_friend', name='add_friend'),
 
 
 )
