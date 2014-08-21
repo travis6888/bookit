@@ -43,13 +43,24 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navBAR-Home">
                     <li>
-                         {% if not user.is_authenticated %}
-                <a href="{% url "social:begin" "google-oauth2" %}">Google Login</a>
-            {% else %}
-                <a href="{% url 'profile' %}">Profile Page</a>
-            {% endif %}
-                    </li>
 
+                <a href="{% url "match" %}">Events</a>
+                        </li>
+                <li>
+
+                <a href data-toggle="modal" data-target=".bs-example-modal-sm">Edit Profile</a>
+                    </li>
+                <li>
+                    <a href="{% url 'friend_match' %}">Friends</a>
+                </li>
+                       <li>
+            <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
+                     </li>
+                    <li>
+
+                    <a class="mapEvents">Map it</a>
+
+                </li>
                       {% for key, values in matched.items %}
 
             {% if values|length > 0 %}
@@ -59,14 +70,7 @@
                 </li>
             {% endif %}
         {% endfor %}
-                <li>
-            <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
-        </li>
-                <li>
 
-                    <a class="mapEvents">Map it</a>
-
-                </li>
 
                 </ul>
             </div>
@@ -226,6 +230,40 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content profileEditModal">
+
+
+                <h3 class="profileHead text-center">Edit Your Profile</h3>
+
+                <div class="profileCreate">
+                    <form  class="profileForm" method="post" action="/edit_profile/">
+                        {% csrf_token %}
+                        <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
+                                                                  placeholder="Zipcode"/></p>
+
+                        <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"
+                                                                                                 id="id_interests"
+                                                                                                 name="interests">
+                        <option value="1">CAR</option>
+                        <option value="2">MUSIC</option>
+                        <option value="3">TECHNOLOGY</option>
+                        <option value="4">HIKING</option>
+                        <option value="5">BIKING</option>
+                        <option value="6">TRAIL</option>
+                        <option value="7">COMEDY</option>
+                        <option value="8">FOOD</option>
+                        <option value="9">SPORTS</option>
+                    </select>
+                        <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

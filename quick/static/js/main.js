@@ -114,4 +114,19 @@ $(document).ready(function(){
     $('.loadEvents').on('click', function() {
         window.location.replace("/loading/");
     });
+
+    $('.profileCreateBtn').on('click', function(){
+        $.ajax({
+            url: '/profile/',
+            dataType: 'json',
+            type: "GET",
+            success: function(response){
+                console.log(response)
+            },
+            error: function(response){
+                console.log(response)
+            }
+
+        });
+    });
 });

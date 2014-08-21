@@ -112,7 +112,8 @@ def profile(request):
     for row in duplicate_freeTimes:
         if duplicate_freeTimes.filter(free_start_dateTime=row.free_start_dateTime).count() > 1:
             row.delete()
-    return render(request, 'profile.html')
+    success = {'success': 'success'}
+    return HttpResponse(json.dumps(success), content_type="application/json")
 
 
 # User creates a profile that saves their current interests and location
@@ -134,7 +135,7 @@ def create_profile(request):
     else:
         form = ProfileCreationForm()
     data = {'form': form}
-    return render(request, 'create_profile.html', data)
+    return render(request, 'home.html', data)
 
 
 
@@ -335,6 +336,8 @@ def matching(request):
                 if event not in matched_event[event.category]:
                     matched_event[event.category].append(event)
 
+
+
     return render(request, 'bootstrap.html', {'matched': matched_event})
 
 
@@ -432,6 +435,27 @@ def add_friend(request):
             if friend_delete.filter(email=row.email).count() > 1:
                 row.delete()
         return redirect("/friend_match/")
+
+
+def edit_profile(request):
+    profile = Profile.objects.filter(user=request.user).first()
+
+    if request.method == 'POST':
+
+        form = ProfileCreationForm(request.POST, instance=profile)
+        if form.is_valid():
+            if form.save():
+                for row in Event.objects.filter(user=request.user):
+                    row.delete()
+
+                return redirect('loading')
+
+    else:
+        form = ProfileCreationForm(instance=profile)
+
+    data = {'form': form}
+
+    return render(request, 'bootstrap.html', data)
 
 
 
