@@ -14,9 +14,8 @@
     <!--bootstrap css-->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/thumbnail-gallery.css' %}" rel="stylesheet">
-{#    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">#}
+    {#    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">#}
     <link href="{% static 'css/stylish-portfolio.css' %}" rel="stylesheet">
-
 
 
     <!--CSS files-->
@@ -42,102 +41,187 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmXQO4kik_QT8QPmzZ2_teiGUak9t1rQc">
     </script>
 <body>
-<a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-         <li class="sidebar-brand">
-                    <a href="#">
-                        BookIt
-                    </a>
-                    <li>
-                 {% if not user.is_authenticated %}
-                        <a href="{% url "social:begin" "google-oauth2" %}">Google Login</a>
-                    {% else %}
-                        Hi {{ user.username }}! | <a href="{% url 'profile' %}">Profile Page</a>
-                    {% endif %}
-                </li>
-                {% for key, values in matched.items %}
-
-                    {% if values|length > 0 %}
-                        <li>
-                            <a href="#{{ key }}">{{ key| lower| capfirst }}</a>
-
-                        </li>
-                    {% endif %}
-                {% endfor %}
-                <li>
-                    <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
-                </li>
-            </ul>
-    </nav>
-    <div class="container">
-        <section id="contact" class="map">
-            <div id="map-canvas"></div>
-        </section>
-        <input class="friend" type="text" placeholder="Enter Friend's Email">
-        <button class="btn btn-lg friendSubmit">Submit</button>
-    </div>
-    <div class="modal fade invitedFriends-modal-sm" tabindex="-1" role="dialog" aria-labelledby="inviteSmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-
-            <div class="modal-content">
-                <h3 class="modal-header">Invite Your Friends by Email</h3>
-                <p>Separate Multiple Friends by Comma</p>
-                <form>
-                    <input class="friendEmail" type="text" placeholder="Enter Email">
-                    <button class="inviteSubmit" type="submit">Invite!</button>
-                </form>
+<!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">BookIt</a>
             </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                         {% if not user.is_authenticated %}
+                <a href="{% url "social:begin" "google-oauth2" %}">Google Login</a>
+            {% else %}
+                <a href="{% url 'profile' %}">Profile Page</a>
+            {% endif %}
+                    </li>
+
+                      {% for key, values in matched.items %}
+
+            {% if values|length > 0 %}
+                <li>
+                    <a href="#{{ key }}">{{ key| lower| capfirst }}</a>
+
+                </li>
+            {% endif %}
+        {% endfor %}
+                <li>
+            <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
+        </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
+        <!-- /.container -->
+    </nav>
+{#<div class="container">#}
+{#    <div class="row">#}
+{#        <section id="contact" class="map">#}
+{#            <div id="map-canvas"></div>#}
+{#        </section>#}
+{#    </div>#}
+{#</div>#}
 
+<div class="modal fade invitedFriends-modal-sm" tabindex="-1" role="dialog" aria-labelledby="inviteSmallModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <h3 class="modal-header">Invite Your Friends by Email</h3>
+
+            <p>Separate Multiple Friends by Comma</p>
+
+            <form>
+                <input class="friendEmail" type="text" placeholder="Enter Email">
+                <button class="inviteSubmit" type="submit">Invite!</button>
+            </form>
+        </div>
     </div>
-    <div class="container">
 
-        <div class="row">
-            <div class="events">
-
-
-                <div class="event">
-
-                    {% for key, values in matched.items %}
-
-                        {% if values|length > 0 %}
-                            <div class="row eventGrid" id="{{ key }}" style="border: 1px solid #000000;">
-
-                            <h3>{{ key| lower| capfirst }}</h3>
-                        {% endif %}
-
-                    {% for  event in values %}
-                        <div class="col-lg-2  col-md-4 col-xs-6 thumb center-block">
-                            <p>Title {{ event.name }}</p>
-
-                            <p>Category {{ event.category| lower| capfirst }}</p>
-
-                            <p>Venue {{ event.venue }}</p>
-                            {% if event.category !=  "BIKING" and event.category != "HIKING" and event.category != "TRAIL"  %}
-                                <p>Starts at: {{ event.start_dateTime| date:"DATETIME_FORMAT" }}</p>
-
-                                <p>Ends at: {{ event.end_dateTime| date:"DATETIME_FORMAT" }}</p>
+</div>
+<div class="container event-content">
 
 
-                                <button class="btn btn-xl bookit" data-id="{{ event.id }}">BookIt</button>
-
-                                <p class="bookedBtn">Booked</p>
-                        {% endif %}
-                        </div>
-                    {% endfor %}
+        {% for key, values in matched.items %}
+            {% if values|length > 0 %}
+                   <!-- Title -->
+                <div class="row text-center">
+                    <div class="col-lg-12">
+                        <h3 id="{{ key }}">{{ key| lower| capfirst }}</h3>
                     </div>
+                </div>
+        <!-- /.row -->
+            {% endif %}
+
+        <!-- Page Features -->
+            {% if values|length > 0 %}
+        {% if key !=  "BIKING" and key != "HIKING" and key != "TRAIL" %}
+        <div class="row text-center {{ key }}">
+            {% for  event in values|slice:":4" %}
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h4>{{ event.name }}</h4>
+                        <p><em>Venue: {{ event.venue }}</em></p>
+
+                            <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
+
+                            <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }} - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
 
 
-                    {% endfor %}
+                            <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
 
+                            <p class="bookedBtn">Booked</p>
+                            </div>
+                    </div>
+            </div>
+            {% endfor %}
+            {% if values|length > 4 %}
+
+                {% for  event in values|slice:"4:" %}
+            <div class="col-md-3 col-sm-6 hero-feature extra-events">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h4>{{ event.name }}</h4>
+                        <p><em>Venue: {{ event.venue }}</em></p>
+
+                            <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
+
+                            <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }} - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
+
+
+                            <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
+
+                            <p class="bookedBtn">Booked</p>
+                            </div>
+                    </div>
+            </div>
+
+            {% endfor %}
+             <div class="row text-center">
+                <div class="col-md-12">
+                    <button class="btn btn-lg seeMore">More Events</button>
                 </div>
 
             </div>
-        </div>
-    </div>
+
+
+
+            {% endif %}
+            </div>
+          {% else %}
+            <div class="row text-center {{ key }}">
+            {% for  event in values|slice:":4" %}
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail thumbnail2">
+                    <div class="caption">
+                        <h4>{{ event.name }}</h4>
+                        <p><em>Venue: {{ event.venue }}</em></p>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% if values|length > 4 %}
+                {% for  event in values|slice:"4:" %}
+            <div class="col-md-3 col-sm-6 hero-feature extra-events">
+                <div class="thumbnail thumbnail2">
+                    <div class="caption">
+                        <h4>{{ event.name }}</h4>
+                        <p><em>Venue: {{ event.venue }}</em></p>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+               <div class="row text-center">
+                <div class="col-md-12">
+                    <button class="btn btn-lg seeMore">More Events</button>
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            </div>
+
+          {% endif %}
+          {% endif %}
+
+         {% endfor %}
+</div>
+
+
+
 
 <script>
 
@@ -154,42 +238,41 @@
 
     }
 
-   function addMarkers() {
-      {% for key, values in matched.items %}
-        {% for event in values %}
-            var point = new google.maps.LatLng({{event.latitude}},{{event.longitude}});
-{#                var image = '{{ STATIC_PREFIX }}'+ 'checkmark.png';#}
+    function addMarkers() {
+        {% for key, values in matched.items %}
+            {% for event in values %}
+                var point = new google.maps.LatLng({{event.latitude}}, {{event.longitude}});
+                {#                var image = '{{ STATIC_PREFIX }}'+ 'checkmark.png';#}
                 var marker = new google.maps.Marker({
-                position: point,
-                map: map,
-{#                icon: image, #}
-{#                url: 'http://172.16.0.101:8882/zone/' + {{mark.id}},#}
-               title: '{{ event.name }}'
-            });
-             marker['infowindow']  = new google.maps.InfoWindow({
-                     content: "<h1>{{event.name}}</h1> <p>{{ event.start_time }} {{ event.end_time }}</p><p><a href={{ event.event_url }}>Event Site</a></p>"
-        });
-            google.maps.event.addListener(marker, 'click', function() {
-                //window.location.href = this.url;
-                 this['infowindow'].open(map, this);
-            });
-           google.maps.event.addListener(marker, 'mouseover', function() {
-                // this['infowindow'].open(map, this);
-                    });
-           google.maps.event.addListener(marker, 'mouseout', function() {
-                // this['infowindow'].close(map, this);
+                    position: point,
+                    map: map,
+                    {#                icon: image, #}
+                    {#                url: 'http://172.16.0.101:8882/zone/' + {{mark.id}},#}
+                    title: '{{ event.name }}'
+                });
+                marker['infowindow'] = new google.maps.InfoWindow({
+                    content: "<h1>{{event.name}}</h1> <p>{{ event.start_time }} {{ event.end_time }}</p><p><a href={{ event.event_url }}>Event Site</a></p>"
+                });
+                google.maps.event.addListener(marker, 'click', function () {
+                    //window.location.href = this.url;
+                    this['infowindow'].open(map, this);
+                });
+                google.maps.event.addListener(marker, 'mouseover', function () {
+                    // this['infowindow'].open(map, this);
+                });
+                google.maps.event.addListener(marker, 'mouseout', function () {
+                    // this['infowindow'].close(map, this);
 
-            });
-
-
+                });
 
 
 
+
+
+            {% endfor %}
         {% endfor %}
-   {% endfor %}
 
-  }
-
+    }
 
 
     google.maps.event.addDomListener(window, 'load', initialize);

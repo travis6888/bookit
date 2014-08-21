@@ -93,6 +93,24 @@ $(document).ready(function(){
         })
     });
 
+
+    $('.seeMore').on('click', function(){
+       $(this).text(function(i,text){
+                        return text === "More Events" ? "Less Info" : "More Events";
+                    });
+       $(this).parent().parent().siblings('.extra-events').toggle()
+    });
+
+    $('.mapEvents').on('click', function(){
+        $('.event-content').toggle('slow');
+        $('.map-container').height(600).slideToggle(0, function(){
+            google.maps.event.trigger(map, "resize")
+        });
+
+    });
+
+
+
     $('.loadEvents').on('click', function() {
         window.location.replace("/loading/");
     });
