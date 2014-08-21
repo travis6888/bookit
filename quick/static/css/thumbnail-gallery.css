@@ -71,6 +71,7 @@ footer {
 }
 
 .thumbnail{
+    border-top: 30px #4FC0A7 solid;
     height: 300px;
     margin-top: 30px;
     margin-bottom: -10px;

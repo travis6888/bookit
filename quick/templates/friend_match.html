@@ -22,27 +22,12 @@
 
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-    <style type="text/css">
-        html {
-            height: 100%
-        }
-
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0
-        }
-
-        #map-canvas {
-            height: 100%
-        }
-    </style>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmXQO4kik_QT8QPmzZ2_teiGUak9t1rQc">
     </script>
 <body>
 <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top navieBar" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -56,13 +41,14 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav navBAR-Home">
                     <li>
-                         {% if not user.is_authenticated %}
-                <a href="{% url "social:begin" "google-oauth2" %}">Google Login</a>
-            {% else %}
-                <a href="{% url 'profile' %}">Profile Page</a>
-            {% endif %}
+
+                <a href="{% url "match" %}">Events</a>
+                        </li>
+                <li>
+
+{#                <a href="{% url '/edit_profile/' %}">Edit Profile</a>#}
                     </li>
 
                       {% for key, values in matched.items %}
@@ -77,6 +63,11 @@
                 <li>
             <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
         </li>
+                <li>
+
+                    <a class="mapEvents">Map it</a>
+
+                </li>
 
                 </ul>
             </div>
@@ -84,26 +75,21 @@
         </div>
         <!-- /.container -->
     </nav>
-{#<div class="container">#}
-{#    <div class="row">#}
-{#        <section id="contact" class="map">#}
-{#            <div id="map-canvas"></div>#}
-{#        </section>#}
-{#    </div>#}
-{#</div>#}
+
 
 <div class="modal fade invitedFriends-modal-sm" tabindex="-1" role="dialog" aria-labelledby="inviteSmallModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-sm">
 
-        <div class="modal-content">
-            <h3 class="modal-header">Invite Your Friends by Email</h3>
+        <div class="modal-content inviteModal">
+            <h3 class="text-center ">Invite Your Friends </h3>
 
-            <p>Separate Multiple Friends by Comma</p>
 
-            <form>
-                <input class="friendEmail" type="text" placeholder="Enter Email">
-                <button class="inviteSubmit" type="submit">Invite!</button>
+            <form class="inviteForm text-center">
+                            <p>Separate Multiple Friends by Comma</p>
+
+                <p><input class="friendEmail" type="text" placeholder="Enter Emails"></p>
+                <p><button class="inviteSubmit btn" type="submit">Invite!</button></p>
             </form>
         </div>
     </div>
@@ -117,7 +103,7 @@
                    <!-- Title -->
                 <div class="row text-center">
                     <div class="col-lg-12">
-                        <h3 id="{{ key }}">{{ key| lower| capfirst }}</h3>
+                        <h3 id="{{ key }}" class="categoryHeader">{{ key| lower| capfirst }}</h3>
                     </div>
                 </div>
         <!-- /.row -->
@@ -139,10 +125,12 @@
                             <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }} - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
 
 
-                            <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
 
-                            <p class="bookedBtn">Booked</p>
+
+
                             </div>
+                    <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
+                    <p class="bookedBtn">Booked</p>
                     </div>
             </div>
             {% endfor %}
@@ -170,15 +158,19 @@
             {% endfor %}
              <div class="row text-center">
                 <div class="col-md-12">
-                    <button class="btn btn-lg seeMore">More Events</button>
+                    <button class="btn seeMore">More Events</button>
                 </div>
 
             </div>
 
 
 
+
+
             {% endif %}
+{#        <hr>#}
             </div>
+
           {% else %}
             <div class="row text-center {{ key }}">
             {% for  event in values|slice:":4" %}
@@ -204,8 +196,9 @@
             {% endfor %}
                <div class="row text-center">
                 <div class="col-md-12">
-                    <button class="btn btn-lg seeMore">More Events</button>
+                    <button class="btn seeMore">More Events</button>
                 </div>
+
 
             </div>
 
@@ -214,10 +207,25 @@
 
             </div>
 
+
           {% endif %}
+           <hr>
+
+
           {% endif %}
 
          {% endfor %}
+
+</div>
+
+<div class="container map-container">
+    <div class="row">
+        <div class="col-lg-12">
+        <section id="contact" class="map">
+            <div id="map-canvas"></div>
+        </section>
+        </div>
+    </div>
 </div>
 
 
@@ -225,16 +233,43 @@
 
 <script>
 
+
+    var geocoder;
+    var lat = '';
+    var lng = '';
+    function codeAddress(){
+        {% with user.profile.all|first as profile %}
+        var zipcode = {{profile.zipcode}};
+        {% endwith %}
+
+       geocoder.geocode({'address': String(zipcode)}, function(results, status){
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            lat = results[0].geometry.location.lat();
+            lng = results[0].geometry.location.lng();
+
+        }
+        else{
+            alert("geocode didnt work" + status)
+        }
+    });
+
+    }
+
     var map;
     function initialize() {
         var mapDiv = document.getElementById('map-canvas');
         map = new google.maps.Map(mapDiv, {
-            center: new google.maps.LatLng(37.7833, -122.4167),
-            zoom: 12,
+{#            center: new google.maps.LatLng(lat, lng),#}
+            zoom: 13,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
         google.maps.event.addListenerOnce(map, 'tilesloaded', addMarkers);
+
+        geocoder = new google.maps.Geocoder();
+
+        codeAddress()
 
     }
 
