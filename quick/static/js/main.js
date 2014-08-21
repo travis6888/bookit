@@ -104,7 +104,7 @@ $(document).ready(function(){
     $('.mapEvents').on('click', function(){
         $('.event-content').toggle('slow');
         $('.map-container').height(600).slideToggle(0, function(){
-            google.maps.event.trigger(map, "resize")
+            google.maps.event.trigger(map, "resize");
         });
 
     });
