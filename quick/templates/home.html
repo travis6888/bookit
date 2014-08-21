@@ -56,13 +56,13 @@
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-sm">
-            <div class="modal-content">
+            <div class="modal-content profileModal">
 
 
-                <h3 class="modal-header profileHead">Create Your Profile</h3>
+                <h3 class="profileHead text-center">Create Your Profile</h3>
 
                 <div class="profileCreate">
-                    <form method="post" action="/create_profile/">
+                    <form  class="profileForm" method="post" action="/create_profile/">
                         {% csrf_token %}
                         <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
                                                                   placeholder="Zipcode"/></p>
@@ -80,12 +80,9 @@
                         <option value="8">FOOD</option>
                         <option value="9">SPORTS</option>
                     </select>
-
-                        <p><input type="submit" value="Submit"></p>
+                        <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
                     </form>
                 </div>
-
-
             </div>
         </div>
     </div>

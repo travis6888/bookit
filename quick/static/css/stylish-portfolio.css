@@ -348,7 +348,7 @@ html, body{
 .loadingText{
     color: #000000;
     text-align: center;
-    vertical-align: text-top;
+    margin-top: 200px;
 }
 .homePage{
     padding: 25px;
@@ -378,5 +378,25 @@ html, body{
 
 .homeBtn{
     background-color: #3aa6ff;
+    color: #ffffff;
+}
+
+.profileCreateBtn{
+    margin: 10px;
+        background-color: #3aa6ff;
+    color: #ffffff;
+
+
+}
+
+.profileModal{
+    background-color: #3aa6ff;
+    color: #ffffff;
+}
+
+.profileForm{
+    background-color: #ffffff ;
+    padding-top: 10px;
+    padding-bottom: 5px;
 }
 
