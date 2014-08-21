@@ -120,7 +120,7 @@
             <div class="col-md-3 col-sm-6 hero-feature">
                 <div class="thumbnail">
                     <div class="caption">
-                        <h4>{{ event.name }}</h4>
+                        <h4><a href="{{ event.event_url }}"> {{ event.name }}</a></h4>
                         <p><em>Venue: {{ event.venue }}</em></p>
 
                             <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
@@ -298,7 +298,7 @@
         var mapDiv = document.getElementById('map-canvas');
         map = new google.maps.Map(mapDiv, {
 {#            center: new google.maps.LatLng(lat, lng),#}
-            zoom: 13,
+            zoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
@@ -323,7 +323,7 @@
                     title: '{{ event.name }}'
                 });
                 marker['infowindow'] = new google.maps.InfoWindow({
-                    content: "<h1>{{event.name}}</h1> <p>{{ event.start_time }} {{ event.end_time }}</p><p><a href={{ event.event_url }}>Event Site</a></p>"
+                    content: "<h1>{{event.name}}</h1> <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5><h5>{{ event.start_dateTime|date:'TIME_FORMAT' }} - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5><h5><a href={{ event.event_url }}>Event</a></h5>"
                 });
                 google.maps.event.addListener(marker, 'click', function () {
                     //window.location.href = this.url;
