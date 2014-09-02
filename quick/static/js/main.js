@@ -3,6 +3,7 @@
  */
 $(document).ready(function(){
 
+    // Gets all the matched events
     $('.eventBtn').on('click', function(){
         $.ajax({
             url: '/match/',
@@ -18,19 +19,7 @@ $(document).ready(function(){
         })
     });
 
-/// Closes the sidebar menu
-    $("#menu-close").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-    // Opens the sidebar menu
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-
+    // Posts the picked event to users google calendar
     $('.bookit').on('click', function(){
         var event_id = $(this).data('id');
         var eventInfo = JSON.stringify(event_id);
@@ -54,10 +43,11 @@ $(document).ready(function(){
 
         })
     });
+
+    // Allows the user to invite their friends through email
     $('.inviteSubmit').on('click', function(){
         var friendsEmail = $('.friendEmail').val();
-        console.log(friendsEmail)
-        friendsEmail2 = JSON.stringify(friendsEmail);
+        var friendsEmail2 = JSON.stringify(friendsEmail);
         $.ajax({
             url: '/invite_friends/',
             type: "POST",
@@ -74,6 +64,7 @@ $(document).ready(function(){
         })
     });
 
+    // Lets people say who referred them to the service when signing up
     $('.friendSubmit').on('click', function(){
         var referrer = $('.friend').val();
         console.log(referrer);
@@ -94,6 +85,7 @@ $(document).ready(function(){
     });
 
 
+    // Lets the user see more events
     $('.seeMore').on('click', function(){
        $(this).text(function(i,text){
                         return text === "More Events" ? "Less Info" : "More Events";
@@ -101,6 +93,7 @@ $(document).ready(function(){
        $(this).parent().parent().siblings('.extra-events').toggle()
     });
 
+    // Lets user see all of the events on a google map
     $('.mapEvents').on('click', function(){
         $('.event-content').toggle('slow');
         $('.map-container').height(600).slideToggle(0, function(){
@@ -110,11 +103,12 @@ $(document).ready(function(){
     });
 
 
-
+    // Redirects to loading page, where the matched events will be pulled
     $('.loadEvents').on('click', function() {
         window.location.replace("/loading/");
     });
 
+    // User can create a profile with zipcode and interests
     $('.profileCreateBtn').on('click', function(){
         $.ajax({
             url: '/profile/',

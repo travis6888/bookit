@@ -1,39 +1,39 @@
-import json
-# import datetime
-from time import mktime
+
+# Date imports
 import datetime
-from django.contrib.auth.models import User
-from django.db.models import Q, Count
-from django.http import HttpResponse, HttpResponseRedirect
-import pytz
-from pytz import timezone
-import sendgrid
 from tzlocal import get_localzone
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
 
+# Django imports
+from django.contrib.auth.models import User
+from django.db.models import Q, Count
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, render_to_response
-from django.utils.formats import localize
+from django.shortcuts import render, redirect
+
 from django.views.decorators.csrf import csrf_exempt
-import googleapiclient
-from googleapiclient.http import HttpRequest
-from pyzipcode import ZipCodeDatabase
 
+# Import Models/Forms
+from quick.forms import ProfileCreationForm
+from quick.models import Profile, FreeTimes, Event, Friend
 
-# Create your views here.
-from googleapiclient import http
+# Google oauth imports
 from googleapiclient.discovery import build
 import httplib2
 from oauth2client.client import AccessTokenCredentials
 from requests import get
-from quick.forms import EmailUserCreationForm, ProfileCreationForm
-from quick.models import Profile, FreeTimes, Event, Friend
+
+#Other imports
+import json
+import sendgrid
+from pyzipcode import ZipCodeDatabase
+
+# Create your views here.
 
 
 def home(request):
     return render(request, 'home.html')
-
 
 
 def profile(request):
@@ -309,7 +309,7 @@ def trail_api(request):
 
 
 def bootstrap(request):
-    return render(request, "bootstrap.html")
+    return render(request, "matched.html")
 
 
 """Matches events with users based if their free times match the event start dates and if those events fit the duration
@@ -338,7 +338,7 @@ def matching(request):
 
 
 
-    return render(request, 'bootstrap.html', {'matched': matched_event})
+    return render(request, 'matched.html', {'matched': matched_event})
 
 
 """Posts event to users google calendar"""
@@ -455,7 +455,7 @@ def edit_profile(request):
 
     data = {'form': form}
 
-    return render(request, 'bootstrap.html', data)
+    return render(request, 'matched.html', data)
 
 
 
