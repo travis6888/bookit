@@ -1,8 +1,0 @@
-{% extends 'home.html' %}
-
-{% block extraheader %}
-    <script type="text/javascript">
-        var calData = {{ calendar_json|safe }}
-        console.log(calData)
-    </script>
-{% endblock extraheader %}

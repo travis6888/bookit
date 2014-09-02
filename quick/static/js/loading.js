@@ -2,6 +2,7 @@
  * Created by Travis on 8/19/14.
  */
 $(document).ready(function(){
+    // Pulls the free time from user google calendar
     $.ajax({
             url: '/profile/',
             dataType: 'json',
@@ -15,6 +16,7 @@ $(document).ready(function(){
 
         }).complete(function(){
     $.when(
+      // Three Ajax calls that tell server to pull event data in the backend
       $.ajax({
            url: "/meetup_api/",
            type: "GET",
@@ -53,9 +55,12 @@ $(document).ready(function(){
            }
        })
     ).then(function(){
+        // When 3 ajax calls are done, redirects to page with the results
         window.location.replace("/match/");
     });
         });
+
+    // Loading page has text that tells the user what is happening, changes every 4 seconds.
     calendar = function(){
          $('.loadingText').html("<h3> Getting Your Free Times</h3>");
         setTimeout(function(){

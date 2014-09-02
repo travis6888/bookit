@@ -13,21 +13,17 @@
 
     <!--bootstrap css-->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    {#    <link href="{% static 'css/thumbnail-gallery.css' %}" rel="stylesheet">#}
-    {#    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">#}
-    <link href="{% static 'css/stylish-portfolio.css' %}" rel="stylesheet">
-
 
     <!--CSS files-->
-
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
 
 
     {% block extraheader %}
     {% endblock extraheader %}
 </head>
 <body>
-{% block content %}
 
+{% block content %}
     <header id="top" class="header">
             <div class="text-vertical-center">
                     <div class="homePage container-fluid">
@@ -86,7 +82,6 @@
             </div>
         </div>
     </div>
-
 {% endblock content %}
 
 </body>
