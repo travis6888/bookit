@@ -227,7 +227,7 @@ def meetup_api(request):
         meetup_epoch_end=int(meetup_end.strftime('%s'))*1000
         for interest in interests:
             meetup_params = {
-                'key': '6b5f26121d4265533b22117774561847',
+                'key': '5a67565c3d21126d7a5f4d3c31547265',
                 'zip': profile.zipcode,
                 'category': meetup_category[interest.interests],
                 'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
