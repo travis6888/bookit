@@ -2,6 +2,12 @@
  * Created by Travis on 8/19/14.
  */
 $(document).ready(function(){
+    mysuccess =function(){
+        // When 3 ajax calls are done, redirects to page with the results
+        window.location.replace("/match/")};
+    myfailure = function(){
+        // When 3 ajax calls are done, redirects to page with the results
+        window.location.replace("/match/")};
     // Pulls the free time from user google calendar
     $.ajax({
             url: '/profile/',
@@ -54,11 +60,9 @@ $(document).ready(function(){
                console.log(response);
            }
        })
-    ).done(function(){
-        // When 3 ajax calls are done, redirects to page with the results
-        window.location.replace("/match/");
+    ).then(myfailure, mysuccess);
     });
-        });
+
 
     // Loading page has text that tells the user what is happening, changes every 5 seconds.
     calendar = function(){
