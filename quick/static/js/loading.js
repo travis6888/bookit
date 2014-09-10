@@ -54,20 +54,20 @@ $(document).ready(function(){
                console.log(response);
            }
        })
-    ).then(function(){
+    ).done(function(){
         // When 3 ajax calls are done, redirects to page with the results
         window.location.replace("/match/");
     });
         });
 
-    // Loading page has text that tells the user what is happening, changes every 4 seconds.
+    // Loading page has text that tells the user what is happening, changes every 5 seconds.
     calendar = function(){
          $('.loadingText').html("<h3> Getting Your Free Times</h3>");
         setTimeout(function(){
             eventbrite();
 
         },
-        4000)
+        5000)
     };
     eventbrite = function(){
         $('.loadingText').html("<h3> Loading Events from EventBrite</h3>");
@@ -75,7 +75,7 @@ $(document).ready(function(){
             meetup();
 
         },
-        4000)
+        5000)
     };
     meetup = function(){
         $('.loadingText').html("<h3> Loading Events from Meetup</h3>");
@@ -83,7 +83,7 @@ $(document).ready(function(){
             trail();
 
         },
-        4000)
+        5000)
     };
     trail = function(){
         $('.loadingText').html("<h3> Loading Outdoor Events</h3>");
