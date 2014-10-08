@@ -448,7 +448,6 @@ def add_friend(request):
 
 def edit_profile(request):
     profile = Profile.objects.filter(user=request.user).first()
-
     if request.method == 'POST':
 
         form = ProfileCreationForm(request.POST, instance=profile)
