@@ -111,7 +111,10 @@ def profile(request):
                         previous_event=event,
                         free_start_dateTime=curent_event_end_dateTime,
                         free_end_dateTime=next_event_start_dateTime
+
                     )
+        else:
+            pass
 
     # Deletes any duplicate free times in database for current user
     duplicate_freeTimes = FreeTimes.objects.filter(user=request.user)
@@ -445,7 +448,6 @@ def add_friend(request):
 
 def edit_profile(request):
     profile = Profile.objects.filter(user=request.user).first()
-
     if request.method == 'POST':
 
         form = ProfileCreationForm(request.POST, instance=profile)
