@@ -331,7 +331,7 @@ def matching(request):
             row.delete()
     for row in event_delete:
         now = datetime.datetime.now()
-        if event_delete.filter(start_dateTime=row.start_dateTime__lte_now):
+        if event_delete.filter(start_dateTime__lte=now):
             row.delete()
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
