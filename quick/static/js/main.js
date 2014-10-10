@@ -16,8 +16,8 @@ $(document).ready(function(){
             error: function(error){
                 console.log(error);
             }
-        })
-    });
+        });
+});
 
     // Posts the picked event to users google calendar
     $('.bookit').on('click', function(){
