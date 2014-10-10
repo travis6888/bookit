@@ -69,52 +69,52 @@ def profile(request):
         current_date = datetime.datetime.now()
 
         #only allow freetimes for the next four weeks
-        if next_event_start_dateTime <= current_date + datetime.timedelta(weeks=4):
+        # if next_event_start_dateTime <= current_date + datetime.timedelta(weeks=4):
 
-                # Currently only working with free slots greater than 3 hours
-            difference = next_event_start_dateTime - curent_event_end_dateTime
-            if difference >= datetime.timedelta(hours=3):
+            # Currently only working with free slots greater than 3 hours
+        difference = next_event_start_dateTime - curent_event_end_dateTime
+        if difference >= datetime.timedelta(hours=3):
 
-                # If freetime block is greater than 1 day, will create separate blocks of free time for each day
-                if difference >= datetime.timedelta(days=1):
-                    hours_added = 12
-                    for j in range(difference.days):
-                        if j == 0:
-                            free_start_dateTime = curent_event_end_dateTime
-                            free_end_dateTime = free_start_dateTime+relativedelta(hours=7)
-                            free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
-                            free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
-                            free_time_amount = free_end_dateTime - free_start_dateTime
-                        else:
-                            free_start_dateTime = curent_event_end_dateTime + relativedelta(hours=hours_added)
-                            free_end_dateTime = free_start_dateTime + relativedelta(hours=14)
-                            free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
-                            free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
-                            free_time_amount = free_end_dateTime - free_start_dateTime
-                        hours_added += 26
-    
-                        FreeTimes.objects.create(
-                            user=request.user,
-                            free_time_start=free_time_start,
-                            free_time_end=free_time_end,
-                            free_time_amount=free_time_amount,
-                            previous_event=event,
-                            free_start_dateTime=free_start_dateTime,
-                            free_end_dateTime=free_end_dateTime
-                        )
-                else:
+            # If freetime block is greater than 1 day, will create separate blocks of free time for each day
+            if difference >= datetime.timedelta(days=1):
+                hours_added = 12
+                for j in range(difference.days):
+                    if j == 0:
+                        free_start_dateTime = curent_event_end_dateTime
+                        free_end_dateTime = free_start_dateTime+relativedelta(hours=7)
+                        free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_amount = free_end_dateTime - free_start_dateTime
+                    else:
+                        free_start_dateTime = curent_event_end_dateTime + relativedelta(hours=hours_added)
+                        free_end_dateTime = free_start_dateTime + relativedelta(hours=14)
+                        free_time_start = free_start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                        free_time_amount = free_end_dateTime - free_start_dateTime
+                    hours_added += 26
+
                     FreeTimes.objects.create(
                         user=request.user,
-                        free_time_start=current_end,
-                        free_time_end=next_start,
-                        free_time_amount=difference,
+                        free_time_start=free_time_start,
+                        free_time_end=free_time_end,
+                        free_time_amount=free_time_amount,
                         previous_event=event,
-                        free_start_dateTime=curent_event_end_dateTime,
-                        free_end_dateTime=next_event_start_dateTime
-
+                        free_start_dateTime=free_start_dateTime,
+                        free_end_dateTime=free_end_dateTime
                     )
-        else:
-            pass
+            else:
+                FreeTimes.objects.create(
+                    user=request.user,
+                    free_time_start=current_end,
+                    free_time_end=next_start,
+                    free_time_amount=difference,
+                    previous_event=event,
+                    free_start_dateTime=curent_event_end_dateTime,
+                    free_end_dateTime=next_event_start_dateTime
+
+                )
+        # else:
+        #     pass
 
     # Deletes any duplicate free times in database for current user
     duplicate_freeTimes = FreeTimes.objects.filter(user=request.user)
@@ -328,6 +328,10 @@ def matching(request):
     event_delete = Event.objects.filter(user=request.user)
     for row in event_delete:
         if event_delete.filter(name=row.name).count() > 1:
+            row.delete()
+    for row in event_delete:
+        now = datetime.datetime.now()
+        if event_delete.filter(start_dateTime=row.start_dateTime__lte_now):
             row.delete()
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
