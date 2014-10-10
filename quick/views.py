@@ -53,7 +53,7 @@ def profile(request):
     current_datetime = datetime.datetime.now().isoformat()[:-3] + 'Z'
     calendar2 = service.events().list(calendarId=calID, timeMin=current_datetime, singleEvents=True,
                                       orderBy='startTime').execute()
-
+    print calendar2
     # Loops through events and determines the time your calendar event ends, and how much time you have until your
     # next one
     for i in range(len(calendar2['items'])-1):
@@ -92,6 +92,7 @@ def profile(request):
                         free_time_end = free_end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
                         free_time_amount = free_end_dateTime - free_start_dateTime
                     hours_added += 26
+                    print free_time_end
 
                     FreeTimes.objects.create(
                         user=request.user,
@@ -329,10 +330,11 @@ def matching(request):
     for row in event_delete:
         if event_delete.filter(name=row.name).count() > 1:
             row.delete()
-    for row in event_delete:
-        now = datetime.datetime.now()
-        if event_delete.filter(start_dateTime__lte=now):
-            row.delete()
+    # Deletes any events that have already happened
+    # for row in event_delete:
+    #     now = datetime.datetime.now()
+    #     if event_delete.filter(end_dateTime__lte=now):
+    #         row.delete()
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
 
