@@ -472,5 +472,9 @@ def edit_profile(request):
     return render(request, 'matched.html', data)
 
 
+def twillo(request):
+    return render(request, 'twillo.html')
+
+
 
 
