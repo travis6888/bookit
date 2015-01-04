@@ -50,4 +50,6 @@ coverage.xml
 docs/_build/
 .idea
 .pyc
-local_settings.py
+#local_settings.py
+secrets
+

@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from bookit.secrets.passwords import oauth_key, oauth_secret
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -31,10 +33,10 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '695052004438-eq4nbiiu00m6o0j3vun145q21vcoo1fk.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'HFs_k7g6ml38NKohwrzfi_ii'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = oauth_key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = oauth_secret
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [...]
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar']
 LOGIN_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 # Application definition
@@ -48,8 +50,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
-
+    'googleapiclient',
+    'uritemplate',
+    'oauth2client',
+    'oauthlib',
+    'urllib3',
     'social.apps.django_app.default',
+    'dateutil',
+    'pytz',
+    'tzlocal',
+    'sendgrid',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,7 +103,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -106,3 +116,23 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+# Parse database configuration from $DATABASE_URL
+# import dj_database_url
+# DATABASES['default'] =  dj_database_url.config()
+#
+# # Honor the 'X-Forwarded-Proto' header for request.is_secure()
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#
+# # Allow all host headers
+# ALLOWED_HOSTS = ['*']
+#
+# # Static asset configuration
+# import os
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# STATIC_ROOT = 'staticfiles'
+# STATIC_URL = '/static/'
+#
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )

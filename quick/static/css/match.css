@@ -1,0 +1,204 @@
+/*!
+ * Start Bootstrap - Thumbnail Gallery HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body, html {
+    /*padding-top: 70px; *//* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    height: 100%;
+    width: 100%;
+}
+.map{
+    height: 100%;
+    width: 100%;
+    margin: auto;
+
+}
+
+#map-canvas {
+    height: 800px;
+    width: 1000px;
+    margin: auto;
+}
+
+.map-container{
+    display: none;
+    height: 1000px;
+    width: 1400px;
+    padding-top: 150px;
+    margin: auto;
+}
+.thumb {
+
+    height: 300px;
+    /*position: absolute;*/
+    /*top: 15px;*/
+    bottom: 0;
+    /*left: 15px;*/
+    right: 0;
+    text-align:center;
+    border: 2px solid blue;
+    margin: 20px;
+    ;
+    /*padding-top:calc(50% - 30px);*/
+
+}
+.eventGrid{
+    text-align: center;
+    padding: 32px;
+    border: 1px solid #000000;
+     ;
+}
+footer {
+    margin: 50px 0;
+}
+
+.bookedBtn{
+    display: none;
+}
+.inner{
+    margin-top: 10px;
+    background-color: #eee;
+}
+
+.hero-spacer {
+    margin-top: 50px;
+}
+
+.hero-feature {
+    margin-bottom: 30px;
+}
+
+.thumbnail{
+    border-top: 30px #4FC0A7 solid;
+    height: 300px;
+    margin-top: 30px;
+    margin-bottom: -10px;
+    background-color: #E5E5E5;
+    border-radius: 10px;
+}
+
+
+.thumbnail2{
+    height: 200px;
+    margin-top: 30px;
+    margin-bottom: -10px;
+    background-color: #E5E5E5;
+}
+
+.bookit{
+    margin: 0 auto;
+    letter-spacing: 2px;
+
+}
+
+.event-content{
+    margin-top: 50px;
+
+}
+
+.MUSIC .thumbnail{
+    border-top: 30px #877D8D solid;
+}
+
+.TECHNOLOGY .thumbnail{
+    border-top: 30px #4FC0A7 solid;
+}
+
+.HIKING .thumbnail{
+    border-top: 30px #9C7965 solid;
+}
+
+.BIKING .thumbnail{
+    border-top: 30px #E2BA6E solid;
+
+}
+
+.TRAIL .thumbnail{
+    border-top: 30px #87C297 solid;
+
+}
+
+.SPORTS .thumbnail{
+    border-top: 30px #476390 solid;
+
+}
+
+.FOOD .thumbnail{
+    border-top: 30px #DF6A70 solid;
+
+}
+
+.COMEDY .thumbnail{
+    border-top: 30px #FFCCBC solid;
+
+}
+
+.CAR .thumbnail{
+    border-top: 30px #AAB588 solid;
+
+}
+
+.extra-events{
+    display: none;
+}
+
+
+.profileCreateBtn{
+    margin: 10px;
+}
+
+.profileModal{
+    background-color: #3aa6ff;
+}
+
+.profileForm{
+    background-color: #ffffff ;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.seeMore{
+    background-color: rgba(0,0,0,0);
+    border: 2px solid #000000;
+    color: #000000;
+
+}
+
+.seeMore:hover{
+    background-color: #6377AE;
+    color: white;
+}
+
+.thumbnail:hover{
+    -webkit-transition: .5s ease;
+    transition: .5s ease;
+    box-shadow: 0 0 5px black;
+}
+
+.categoryHeader{
+    font-weight: lighter;
+    letter-spacing: 3px;
+    font-size: 2.50em;
+}
+.inviteModal{
+    background-color: #3aa6ff;
+    color: #ffffff;
+}
+.inviteForm{
+    background-color: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    color: #000000;
+}
+.inviteSubmit{
+    margin: 10px;
+    background-color: #3aa6ff;
+    color: #ffffff;
+    letter-spacing: 2px;
+
+}
+.navBAR-Home{
+    color: #ffffff;
+}

@@ -4,72 +4,86 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-        <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.js' %}"></script>
+    <!--jquery files-->
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
 
-        <script src="{% static 'js/eventful.js' %}"></script>
-    <script src="{% static 'js/angular.min.js' %}"></script>
-    <script src="{% static 'js/app.js' %}"></script>
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <!--bootstrap js file-->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 
-    <script src="{% static 'js/controller.js' %}"></script>
-    <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-    <script src="{% static 'js/lodash.underscore.min.js' %}"></script>
-    <script src="{% static 'js/angular-google-maps.min.js' %}"></script>
+    <!--bootstrap css-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-        <script src="{% static 'js/calendar.js' %}"></script>
+    <!--CSS files-->
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
 
 
-
+    {% block extraheader %}
+    {% endblock extraheader %}
 </head>
 <body>
-{% verbatim %}
-<div ng-app='myApplicationModule'>
 
-    <div ng-controller='eventController'>
-        <input type="text" ng-model="searched" placeholder="Search">
-        <input type="text" ng-model="city" placeholder="City">
+{% block content %}
+    <header id="top" class="header">
+            <div class="text-vertical-center">
+                    <div class="homePage container-fluid">
+                    <div class="homeText">
+                <h1><em>BookIt</em></h1>
 
-        <button ng-click='search(searched, city);'>Search</button>
-        <ol>
-            <li ng-repeat="disk in eventslist track by $index" ng-init="description=[]">{{ disk['name']['text'] }}
-                <button ng-click="description[$index] = true" ng-hide="description[$index]">More Info</button>
-                <div ng-show="description[$index]">
-                    <p>Category: {{ disk['category']['name'] }}</p>
+                <h3>Events that fit your schedule!</h3>
+                <br>
+                {% if not user.is_authenticated %}
+                    <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn btn-lg homeBtn">Google Login</a>
+                {% elif user.profile.count == 1 %}
+                    <button class="loadEvents btn btn btn-lg homeBtn">Get Events</button>
+                {% else %}
+                    <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">Create
+                        Profile
+                    </button>
+                {% endif %}
+            </div>
+                    </div>
+        </div>
+    </header>
 
-                    <p>Description: {{ disk['description']['text'] }}</p>
 
-                    <p>Starts: {{ disk['start']['local'] }}</p>
 
-                    <p>Ends: {{ disk['end']['local'] }}</p>
-                    <button ng-click="description[$index] = false;">Show less</button>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content profileModal">
+
+
+                <h3 class="profileHead text-center">Create Your Profile</h3>
+
+                <div class="profileCreate">
+                    <form  class="profileForm" method="post" action="/create_profile/">
+                        {% csrf_token %}
+                        <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
+                                                                  placeholder="Zipcode"/></p>
+
+                        <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"
+                                                                                                 id="id_interests"
+                                                                                                 name="interests">
+                        <option value="1">CAR</option>
+                        <option value="2">MUSIC</option>
+                        <option value="3">TECHNOLOGY</option>
+                        <option value="4">HIKING</option>
+                        <option value="5">BIKING</option>
+                        <option value="6">TRAIL</option>
+                        <option value="7">COMEDY</option>
+                        <option value="8">FOOD</option>
+                        <option value="9">SPORTS</option>
+                    </select>
+                        <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
+                    </form>
                 </div>
-
-            </li>
-
-    </ol>
-</div>
-<button ng-click='mapped;'>Map them</button>
-<div id="map_canvas" ng-controller="mainCtrl">
-    <google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
-        <marker coords="marker.coords"  idkey="marker.id" >
-        </marker>
-    </google-map>
-</div>
-</div>
-{% endverbatim %}
-<html>
-<body>
-<nav>
-    {% if not user.is_authenticated %}
-        <a href="{% url "social:begin" "google-oauth2" %}">Google Login</a>
-    {% else %}
-        Hi {{ user.username }}!
-    {% endif %}
-</nav>
-{% block content %}{% endblock content %}
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
 
 </body>
+
 </html>

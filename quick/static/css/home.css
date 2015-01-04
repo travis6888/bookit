@@ -1,0 +1,403 @@
+/*!
+ * Start Bootstrap - Stylish Portfolio Bootstrap Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Global Styles */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.text-vertical-center {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.text-vertical-center h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 4.5em;
+    font-weight: 700;
+}
+
+/* Custom Button Styles */
+
+.btn-dark {
+    border-radius: 0;
+    color: #fff;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+    color: #fff;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.btn-light {
+    border-radius: 0;
+    color: #333;
+    background-color: rgb(255,255,255);
+}
+
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active {
+    color: #333;
+    background-color: rgba(255,255,255,0.8);
+}
+
+/* Custom Horizontal Rule */
+
+hr.small {
+    max-width: 100px;
+}
+
+/* Side Menu */
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    margin-right: -250px;
+    overflow-y: auto;
+    background: #222;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 55px;
+    font-size: 18px;
+    line-height: 55px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+#menu-toggle {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+#sidebar-wrapper.active {
+    right: 250px;
+    width: 250px;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+.toggle {
+    margin: 5px 5px 0 0;
+}
+
+/* Header */
+
+.header {
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(../img/home_slide_4.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    color: #ffffff;
+}
+
+/* About */
+
+.about {
+    padding: 50px 0;
+}
+
+/* Services */
+
+.services {
+    padding: 50px 0;
+}
+
+.service-item {
+    margin-bottom: 30px;
+}
+
+/* Callout */
+
+.callout {
+    display: table;
+    width: 100%;
+    height: 400px;
+    color: #fff;
+    /*background: url(../img/callout.jpg) no-repeat center center scroll;*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+/* Portfolio */
+
+.portfolio {
+    padding: 50px 0;
+}
+
+.portfolio-item {
+    margin-bottom: 30px;
+}
+
+.img-portfolio {
+    margin: 0 auto;
+}
+
+.img-portfolio:hover {
+    opacity: 0.8;
+}
+
+/* Call to Action */
+
+.call-to-action {
+    padding: 50px 0;
+}
+
+.call-to-action .btn {
+    margin: 10px;
+}
+
+/* Map */
+
+.map {
+    height: 300px;
+}
+
+@media(max-width:768px) {
+    .map {
+        height: 75%;
+    }
+}
+
+/* Footer */
+
+footer {
+    padding: 100px 0;
+}
+h1{
+    background-color: transparent;
+}
+.profileCreate{
+    text-align: center;
+    margin: auto;
+    background-color: #eeeeee;
+
+}
+@import url(http://fonts.googleapis.com/css?family=Raleway:900,700,500,300,100);
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body{
+  background: rgb(224, 217, 217));
+  height: 100%;
+}
+
+.center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+}
+
+.bouncywrap{
+  position: relative;
+}
+
+
+.dotcon{
+  display: block;
+  float: left;
+  width: 50px;
+  position: absolute;
+}
+
+.dc1{
+  -webkit-animation: bouncy1 1.5s infinite;
+  left: -40px;
+  animation: bouncy1 1.5s infinite;
+}
+
+.dc2{
+  -webkit-animation: bouncy2 1.5s infinite;
+  animation: bouncy2 1.5s infinite;
+  left: 0;
+}
+
+.dc3{
+  -webkit-animation: bouncy3 1.5s infinite;
+  animation: bouncy3 1.5s infinite;
+  left: 40px;
+}
+
+.dot{
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background: rgba(0, 163, 255, 0.80);
+}
+
+
+@-webkit-keyframes bouncy1{
+  0% {-webkit-transform: translate(0px,0px) rotate(0deg);}
+  50% {-webkit-transform: translate(0px,0px) rotate(180deg);}
+  100% {-webkit-transform: translate(40px,0px) rotate(-180deg);}
+}
+
+@keyframes bouncy1{
+  0% {transform: translate(0px,0px) rotate(0deg);}
+  50% {transform: translate(0px,0px) rotate(180deg);}
+  100% {transform: translate(40px,0px) rotate(-180deg);}
+}
+
+@-webkit-keyframes bouncy2{
+  0% {-webkit-transform: translateX(0px);}
+  50% {-webkit-transform: translateX(-40px);}
+  100% {-webkit-transform: translateX(-40px);}
+}
+
+@keyframes bouncy2{
+  0% {transform: translateX(0px);}
+  50% {transform: translateX(-40px);}
+  100% {transform: translateX(-40px);}
+}
+
+@-webkit-keyframes bouncy3{
+  0% {-webkit-transform: translateX(0px);}
+  50% {-webkit-transform: translateX(0px);}
+  100% {-webkit-transform: translateX(-40px);}
+}
+
+@keyframes bouncy3{
+  0% {transform: translateX(0px);}
+  50% {transform: translateX(0px);}
+  100% {transform: translateX(-40px);}
+}
+
+.loading{
+
+}
+.loadingText{
+    color: #000000;
+    text-align: center;
+    margin-top: 200px;
+}
+.homePage{
+    padding: 25px;
+    width: 100%;
+    min-width: 350px;
+    max-width: 25%;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.60);
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 20px;
+}
+.homeText{
+    color: #ffffff;
+
+}
+
+.homeText h1 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 60px;
+    opacity: 1;
+}
+
+.homeText h3 {
+    font-weight: 200;
+}
+
+.homeBtn{
+    background-color: #3aa6ff;
+    color: #ffffff;
+}
+
+.profileCreateBtn{
+    margin: 10px;
+        background-color: #3aa6ff;
+    color: #ffffff;
+
+
+}
+
+.profileModal{
+    background-color: #3aa6ff;
+    color: #ffffff;
+}
+
+.profileForm{
+    background-color: #ffffff ;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    color: #000000;
+}
+
