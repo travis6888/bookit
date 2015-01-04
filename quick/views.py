@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 # Import Models/Forms
+from bookit.secrets.passwords import eventbrite_token, meetup_key, outdoor_key
 from quick.forms import ProfileCreationForm
 from quick.models import Profile, FreeTimes, Event, Friend
 
@@ -168,7 +169,7 @@ def eventbrite_api(request):
         end_time = "{}Z".format(free_time.free_time_end[:-6])
         for interest in interests:
             eventbrite_params = {
-            "token": 'VMJ33HPKLUJ3INR7ASCM',
+            "token": eventbrite_token,
             'popular': True,
             'q': str(interest.interests),
             'location.latitude': zipcode.latitude,
@@ -237,7 +238,7 @@ def meetup_api(request):
         meetup_epoch_end=int(meetup_end.strftime('%s'))*1000
         for interest in interests:
             meetup_params = {
-                'key': '5a67565c3d21126d7a5f4d3c31547265',
+                'key': meetup_key,
                 'zip': profile.zipcode,
                 'category': meetup_category[interest.interests],
                 'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
@@ -300,7 +301,7 @@ def trail_api(request):
     for interest in interests:
         activity = interest
         city = zipcode.city
-        url = ('https://outdoor-data-api.herokuapp.com/api.json?api_key=e65652575b4c95b8d78fae0621bf7428&q[city_eq]={}&q[activities_activity_type_name_cont]={}&q[radius]=40'.format(city, activity))
+        url = ('https://outdoor-data-api.herokuapp.com/api.json?api_key='+outdoor_key+'&q[city_eq]={}&q[activities_activity_type_name_cont]={}&q[radius]=40'.format(city, activity))
         resp = get(url=url)
         data = json.loads(resp.text)
         for outdoor in data['places']:
