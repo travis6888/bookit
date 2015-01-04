@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from bookit.secrets.passwords import oauth_key, oauth_secret
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -31,8 +33,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '695052004438-eq4nbiiu00m6o0j3vun145q21vcoo1fk.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'HFs_k7g6ml38NKohwrzfi_ii'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = oauth_key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = oauth_secret
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar']
 LOGIN_URL = 'home'
