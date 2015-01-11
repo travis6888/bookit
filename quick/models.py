@@ -22,7 +22,7 @@ class Interest(models.Model):
 
 
 class Profile(models.Model):
-    oauth_token = models.CharField(max_length=300, blank=True, null=True)
+    # oauth_token = models.CharField(max_length=300, blank=True, null=True)
     user = models.ForeignKey(User, null=True, blank=True, related_name="profile")
     zipcode = models.IntegerField(max_length=5, null=True, blank=True)
     email = models.CharField(max_length=100, null=True, blank=True)

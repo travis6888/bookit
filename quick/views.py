@@ -15,7 +15,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 # Import Models/Forms
-from bookit.secrets.passwords import eventbrite_token, meetup_key, outdoor_key
+from bookit.secrets.passwords import eventbrite_token, meetup_key, outdoor_key, developer_key
 from quick.forms import ProfileCreationForm
 from quick.models import Profile, FreeTimes, Event, Friend
 
@@ -108,6 +108,7 @@ def profile(request):
 
                     )})
         else:
+            print "out of range", curent_event_end_dateTime, next_event_start_dateTime
             pass
 
     # Deletes any duplicate free times in database for current user
@@ -123,14 +124,15 @@ def profile(request):
 def create_profile(request):
     # Pulls information about the user from database to save
     user_social_auth = request.user.social_auth.filter(provider='google-oauth2').first()
-    access_token = user_social_auth.extra_data['access_token']
+    # access_token = user_social_auth.extra_data['access_token']
     calID=user_social_auth.uid
+    print calID
     if request.method == "POST":
         form = ProfileCreationForm(request.POST)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.email =calID
-            profile.oauth_token = access_token
+            # profile.oauth_token = access_token
             profile.user = request.user
             profile.save()
             form.save_m2m()
@@ -175,8 +177,11 @@ def eventbrite_api(request):
 
             # Saves returned events to database
             for event in eventbrite_data['events']:
-                formatted_start = event['start']['utc'][:-1] + '-7:00'
-                formatted_end = event['end']['utc'][:-1] + '-7:00'
+                formatted_start = event['start']['utc'][:-1] + '.000-08:00'
+                formatted_end = event['end']['utc'][:-1] + '.000-08:00'
+                print event['start']['utc']
+                # real_format = datetime.datetime.strptime(formatted_start,'%Y-%m-%dT%H:%M:%S%f-08:00')
+
                 # Creates a datetime object from the time returned by Api
                 datetime_start = dateutil.parser.parse(event['start']['utc'])
                 datetime_end = dateutil.parser.parse(event['end']['utc'])
@@ -293,11 +298,11 @@ def trail_api(request):
     for interest in interests:
         activity = interest
         city = zipcode.city
-        url = ('https://outdoor-data-api.herokuapp.com/api.json?api_key='+outdoor_key+'&q[city_eq]={}&q[activities_activity_type_name_cont]={}&q[radius]=40'.format(city, activity))
+        url = ('https://outdoor-data-api.herokuapp.com/api.json?api_key='+outdoor_key+'&q[city_eq]={}&q[activities_activity_type_name_cont]={}&q[radius]=80'.format(city, activity))
         resp = get(url=url)
         data = json.loads(resp.text)
         for outdoor in data['places']:
-            Event.objects.create(
+            Event.objects.bulk_create({Event(
                 name=outdoor['name'],
                 venue=outdoor['city'],
                 latitude=outdoor['lat'],
@@ -305,7 +310,7 @@ def trail_api(request):
                 description=outdoor['directions'],
                 picture="http://38.media.tumblr.com/e5c079497b3a6a338f6d7c9b90be871f/tumblr_n5wawiu3Lm1st5lhmo1_1280.jpg",
                 category=activity,
-                user=request.user)
+                user=request.user)})
 
     success = {'success': 'success'}
     return HttpResponse(json.dumps(success), content_type="application/json")
@@ -357,6 +362,9 @@ def post_event(request):
         event = Event.objects.get(pk=event_id)
 
         # Parameters for event being saved to google calendar
+        print str(event.end_dateTime)+'.000-08.00', event.start_dateTime
+
+
         event_info = {
             "end": {
                 "dateTime": event.end_time
@@ -378,7 +386,7 @@ def post_event(request):
         credentials = AccessTokenCredentials(access_token, 'my-user-agent/1.0')
         http= httplib2.Http()
         http = credentials.authorize(http)
-        service = build(serviceName='calendar', version='v3', http=http, developerKey='HFs_k7g6ml38NKohwrzfi_ii')
+        service = build(serviceName='calendar', version='v3', http=http, developerKey=developer_key)
         created_event = service.events().insert(calendarId='primary', body=event_info).execute()
 
         return HttpResponse(json.dumps(event_id), content_type='application/json')

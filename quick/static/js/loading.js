@@ -23,18 +23,18 @@ $(document).ready(function(){
         }).complete(function(){
     $.when(
       // Three Ajax calls that tell server to pull event data in the backend
-      $.ajax({
-           url: "/meetup_api/",
-           type: "GET",
-           dataType: "json",
-           success: function(response){
-               console.log(response);
-           },
-           error: function(response){
-               console.log(response);
-
-           }
-       }),
+//      $.ajax({
+//           url: "/meetup_api/",
+//           type: "GET",
+//           dataType: "json",
+//           success: function(response){
+//               console.log(response);
+//           },
+//           error: function(response){
+//               console.log(response);
+//
+//           }
+//       }),
        $.ajax({
            url: "/trail_api/",
            type: "GET",
