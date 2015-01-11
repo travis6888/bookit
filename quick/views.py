@@ -1,6 +1,7 @@
 
 # Date imports
 import datetime
+import pytz
 from tzlocal import get_localzone
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
@@ -168,7 +169,7 @@ def eventbrite_api(request):
             'q': str(interest.interests),
             'location.latitude': zipcode.latitude,
             'location.longitude': zipcode.longitude,
-            'location.within': '20mi',
+            'location.within': '40mi',
             'start_date.range_start': start_time,
             'start_date.range_end': end_time
             }
@@ -177,15 +178,18 @@ def eventbrite_api(request):
 
             # Saves returned events to database
             for event in eventbrite_data['events']:
-                formatted_start = event['start']['utc'][:-1] + '.000-08:00'
-                formatted_end = event['end']['utc'][:-1] + '.000-08:00'
-                print event['start']['utc']
+                formatted_start = event['start']['utc'][:-1]
+                est= pytz.timezone('US/Pacific-New')
+                # print formatted_start.astimezone(est)
+                formatted_end = str(event['end']['utc'][:-1]) + str('.000-08:00')
+                # print  str(str(event['start']['utc'][:-1]) + str('.000-08:00')), event['start']['utc']
                 # real_format = datetime.datetime.strptime(formatted_start,'%Y-%m-%dT%H:%M:%S%f-08:00')
 
                 # Creates a datetime object from the time returned by Api
                 datetime_start = dateutil.parser.parse(event['start']['utc'])
                 datetime_end = dateutil.parser.parse(event['end']['utc'])
-                Event.objects.create(
+                print datetime_start.astimezone(est)
+                Event.objects.bulk_create({Event(
                     name=event['name']['text'],
                     category=interest.interests,
                     venue=event['venue']['name'],
@@ -198,7 +202,7 @@ def eventbrite_api(request):
                     event_url=event['url'],
                     user=request.user,
                     start_dateTime=datetime_start,
-                    end_dateTime=datetime_end
+                    end_dateTime=datetime_end)}
                 )
     success = {'success': 'success'}
     return HttpResponse(json.dumps(success), content_type="application/json")
