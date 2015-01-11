@@ -31,6 +31,7 @@ import sendgrid
 from pyzipcode import ZipCodeDatabase
 
 # Create your views here.
+from quick.utils import sign_in_google
 
 
 def home(request):
@@ -38,6 +39,7 @@ def home(request):
 
 
 def profile(request):
+    # calendar2 = sign_in_google(request)
     """User logs in through google using python social login. Once the user is logged in, google calendar information is
     pulled from there account. Records of free times are created based on the time in betweeen events"""
 
@@ -53,18 +55,32 @@ def profile(request):
     service = build(serviceName='calendar', version='v3', http=http, developerKey='HFs_k7g6ml38NKohwrzfi_ii')
     current_datetime = datetime.datetime.now().isoformat()[:-3] + 'Z'
     calendar2 = service.events().list(calendarId=calID, timeMin=current_datetime, singleEvents=True,
-                                      orderBy='startTime').execute()
-    print calendar2
-    # Loops through events and determines the time your calendar event ends, and how much time you have until your
-    # next one
+                                  orderBy='startTime').execute()
+    # freebusy_query = {
+    #     # "timeMin" : time_min,
+    #     # "timeMax" : time_max,
+    #     "items" :[
+    #       {
+    #         "id" : calID
+    #       }
+    #     ]
+    #   }
+    # print calID
+    # calendar3 = service.freebusy().query(body=freebusy_query)
+    # print calendar3['freebusy_query']
+    # for i in range(len(calendar3['body'])-1):
+    #     print i
+    # # Loops through events and determines the time your calendar event ends, and how much time you have until your
+    # # next one
     for i in range(len(calendar2['items'])-1):
         next_start = calendar2['items'][i + 1]['start']['dateTime']
         current_end = calendar2['items'][i]['end']['dateTime']
         event = (str(calendar2['items'][i]['summary']))
+        print next_start, current_end
 
-        # Converts unicode information from Google into datetime objects
-        curent_event_end_dateTime = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-07:00')
-        next_event_start_dateTime = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-07:00')
+        # Converts unicode information from Google into datetime objects, remember to change for daylight savings
+        curent_event_end_dateTime = datetime.datetime.strptime(current_end, '%Y-%m-%dT%H:%M:%S-08:00')
+        next_event_start_dateTime = datetime.datetime.strptime(next_start, '%Y-%m-%dT%H:%M:%S-08:00')
 
         #find todays date
         current_date = datetime.datetime.now()

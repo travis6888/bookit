@@ -10,7 +10,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 from bookit.secrets.passwords import oauth_key, oauth_secret
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
