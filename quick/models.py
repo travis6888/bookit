@@ -27,7 +27,9 @@ class Profile(models.Model):
     zipcode = models.IntegerField(max_length=5, null=True, blank=True)
     email = models.CharField(max_length=100, null=True, blank=True)
     interests = models.ManyToManyField(Interest, null=True, blank=True)
-
+    TIMEZONES = (('US/Pacific', 'US/Pacific'),('US/Central', 'US/Central'), ('US/Eastern', 'US/Eastern')
+                 ,('US/Mountain', 'US/Mountain'))
+    timezone = models.CharField(max_length=15, null=True, choices=TIMEZONES, blank=True)
 
     def __unicode__(self):
         return self.email
