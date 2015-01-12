@@ -180,10 +180,10 @@ def eventbrite_api(request):
 
             # Saves returned events to database
             for event in eventbrite_data['events']:
-                formatted_start = event['start']['utc'][:-1]+ str('.000-08:00')
+                formatted_start = event['start']['local']+ str('.000-08:00')
 
                 # print formatted_start.astimezone(est)
-                formatted_end = str(event['end']['utc'][:-1]) + str('.000-08:00')
+                formatted_end = str(event['end']['local']) + str('.000-08:00')
 
                 # print  str(str(event['start']['utc'][:-1]) + str('.000-08:00')), event['start']['utc']
                 # real_format = datetime.datetime.strptime(formatted_start,'%Y-%m-%dT%H:%M:%S%f-08:00')
@@ -361,8 +361,9 @@ def matching(request):
                     matched_event[event.category].append(event)
 
 
+    profile = Profile.objects.get(user=request.user)
 
-    return render(request, 'matched.html', {'matched': matched_event})
+    return render(request, 'matched.html', {'matched': matched_event, 'timezone': profile.timezone })
 
 
 """Posts event to users google calendar"""
