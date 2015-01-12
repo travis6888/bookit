@@ -177,12 +177,10 @@ def eventbrite_api(request):
             }
             eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
             eventbrite_data = json.loads(eventbrite_resp.text)
-            from_zone = tz.tzutc()
-            to_zone = profile.timezone
-            timezone2 = tz.gettz(to_zone)
+
             # Saves returned events to database
             for event in eventbrite_data['events']:
-                formatted_start = event['start']['utc'][:-1]
+                formatted_start = event['start']['utc'][:-1]+ str('.000-08:00')
 
                 # print formatted_start.astimezone(est)
                 formatted_end = str(event['end']['utc'][:-1]) + str('.000-08:00')
@@ -194,8 +192,6 @@ def eventbrite_api(request):
 
                 datetime_start = dateutil.parser.parse(event['start']['utc'])
 
-                start = datetime_start.astimezone(timezone2)
-                print start, datetime_start.replace(tzinfo=timezone2), formatted_start
 
                 datetime_end = dateutil.parser.parse(event['end']['utc'])
 
@@ -212,7 +208,7 @@ def eventbrite_api(request):
                     picture=event['logo_url'],
                     event_url=event['url'],
                     user=request.user,
-                    start_dateTime=start,
+                    start_dateTime=datetime_start,
                     end_dateTime=datetime_end)}
                 )
     success = {'success': 'success'}
