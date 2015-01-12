@@ -159,59 +159,60 @@ def eventbrite_api(request):
     free_times = FreeTimes.objects.filter(user=request.user)
     eventbrite_url='https://www.eventbriteapi.com/v3/events/search/?'
 
-    for free_time in free_times:
+    # for free_time in free_times:
 
-        # formats time to match eventbrite api
-        start_time =  "{}Z".format(free_time.free_time_start[:-6])
-        end_time = "{}Z".format(free_time.free_time_end[:-6])
-        for interest in interests:
-            eventbrite_params = {
-            "token": eventbrite_token,
-            'popular': True,
-            'q': str(interest.interests),
-            'location.latitude': zipcode.latitude,
-            'location.longitude': zipcode.longitude,
-            'location.within': '40mi',
-            'start_date.range_start': start_time,
-            'start_date.range_end': end_time
-            }
-            eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
-            eventbrite_data = json.loads(eventbrite_resp.text)
+    # formats time to match eventbrite api
+    start_time =  "{}Z".format(free_times.first().free_time_start[:-6])
+    end_time = "{}Z".format(free_times.last().free_time_end[:-6])
+    print start_time, end_time
+    for interest in interests:
+        eventbrite_params = {
+        "token": eventbrite_token,
+        'popular': True,
+        'q': str(interest.interests),
+        'location.latitude': zipcode.latitude,
+        'location.longitude': zipcode.longitude,
+        'location.within': '40mi',
+        'start_date.range_start': start_time,
+        'start_date.range_end': end_time
+        }
+        eventbrite_resp = get(url=eventbrite_url, params=eventbrite_params)
+        eventbrite_data = json.loads(eventbrite_resp.text)
 
-            # Saves returned events to database
-            for event in eventbrite_data['events']:
-                formatted_start = event['start']['local']+ str('.000-08:00')
+        # Saves returned events to database
+        for event in eventbrite_data['events']:
+            formatted_start = event['start']['local']+ str('.000-08:00')
 
-                # print formatted_start.astimezone(est)
-                formatted_end = str(event['end']['local']) + str('.000-08:00')
+            # print formatted_start.astimezone(est)
+            formatted_end = str(event['end']['local']) + str('.000-08:00')
 
-                # print  str(str(event['start']['utc'][:-1]) + str('.000-08:00')), event['start']['utc']
-                # real_format = datetime.datetime.strptime(formatted_start,'%Y-%m-%dT%H:%M:%S%f-08:00')
+            # print  str(str(event['start']['utc'][:-1]) + str('.000-08:00')), event['start']['utc']
+            # real_format = datetime.datetime.strptime(formatted_start,'%Y-%m-%dT%H:%M:%S%f-08:00')
 
-                # Creates a datetime object from the time returned by Api
+            # Creates a datetime object from the time returned by Api
 
-                datetime_start = dateutil.parser.parse(event['start']['utc'])
-
-
-                datetime_end = dateutil.parser.parse(event['end']['utc'])
+            datetime_start = dateutil.parser.parse(event['start']['utc'])
 
 
-                Event.objects.bulk_create({Event(
-                    name=event['name']['text'],
-                    category=interest.interests,
-                    venue=event['venue']['name'],
-                    description=event['description']['text'],
-                    latitude=event['venue']['latitude'],
-                    longitude=event['venue']['longitude'],
-                    start_time=formatted_start,
-                    end_time=formatted_end,
-                    picture=event['logo_url'],
-                    event_url=event['url'],
-                    user=request.user,
-                    start_dateTime=datetime_start,
-                    end_dateTime=datetime_end)}
-                )
-    success = {'success': 'success'}
+            datetime_end = dateutil.parser.parse(event['end']['utc'])
+
+
+            Event.objects.bulk_create({Event(
+                name=event['name']['text'],
+                category=interest.interests,
+                venue=event['venue']['name'],
+                description=event['description']['text'],
+                latitude=event['venue']['latitude'],
+                longitude=event['venue']['longitude'],
+                start_time=formatted_start,
+                end_time=formatted_end,
+                picture=event['logo_url'],
+                event_url=event['url'],
+                user=request.user,
+                start_dateTime=datetime_start,
+                end_dateTime=datetime_end)}
+            )
+        success = {'success': eventbrite_data}
     return HttpResponse(json.dumps(success), content_type="application/json")
 
 
