@@ -142,7 +142,7 @@ def create_profile(request):
     else:
         form = ProfileCreationForm()
     data = {'form': form}
-    return render(request, 'home.html', data)
+    return render(request, 'create_profile.html', data)
 
 
 
