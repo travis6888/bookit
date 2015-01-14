@@ -33,7 +33,7 @@ import sendgrid
 from pyzipcode import ZipCodeDatabase
 
 # Create your views here.
-from quick.utils import sign_in_google
+from quick.utils import sign_in_google, item_check
 
 
 def home(request):
@@ -196,22 +196,27 @@ def eventbrite_api(request):
 
             datetime_end = dateutil.parser.parse(event['end']['utc'])
 
+            if event['description'] is not None:
+                item = item_check(event['description']['text'], event)
 
-            Event.objects.bulk_create({Event(
-                name=event['name']['text'],
-                category=interest.interests,
-                venue=event['venue']['name'],
-                description=event['description']['text'],
-                latitude=event['venue']['latitude'],
-                longitude=event['venue']['longitude'],
-                start_time=formatted_start,
-                end_time=formatted_end,
-                picture=event['logo_url'],
-                event_url=event['url'],
-                user=request.user,
-                start_dateTime=datetime_start,
-                end_dateTime=datetime_end)}
-            )
+                Event.objects.bulk_create({Event(
+                    name=event['name']['text'],
+                    category=interest.interests,
+                    venue=event['venue']['name'],
+                    description=event['description']['text'],
+                    latitude=event['venue']['latitude'],
+                    longitude=event['venue']['longitude'],
+                    start_time=formatted_start,
+                    end_time=formatted_end,
+                    picture=event['logo_url'],
+                    event_url=event['url'],
+                    user=request.user,
+                    start_dateTime=datetime_start,
+                    end_dateTime=datetime_end)}
+                )
+            else:
+                print "broken"
+                pass
         success = {'success': eventbrite_data}
     return HttpResponse(json.dumps(success), content_type="application/json")
 
@@ -250,7 +255,7 @@ def meetup_api(request):
         meetup_params = {
             'key': meetup_key,
             'zip': profile.zipcode,
-            'radius': 25,
+            'radius': 50,
             'category': meetup_category[interest.interests],
             'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
             'page': 1
@@ -266,17 +271,17 @@ def meetup_api(request):
             epoch_time = event['time']
             start_dateTime_obj = datetime.datetime.fromtimestamp(epoch_time/1000)
             start_dateTime = tz.localize(start_dateTime_obj)
-            start_time = start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+            start_time = start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-08:00')
 
             #Checks if returned event has a duration
             if event.get('duration'):
                 end_time_epoch = event['time'] + event['duration']
                 end_dateTime_obj = datetime.datetime.fromtimestamp(end_time_epoch/1000)
                 end_dateTime = tz.localize(end_dateTime_obj)
-                end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-08:00')
             else:
                 end_dateTime = start_dateTime+relativedelta(hours=5)
-                end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+                end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-08:00')
 
             #Checks if event has venue and description
             if event.get('venue') and event.get('time') and event.get('name'):
