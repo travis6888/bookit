@@ -238,64 +238,66 @@ def meetup_api(request):
     }
     free_times = FreeTimes.objects.filter(user=request.user)
     meetup_url= 'https://api.meetup.com/2/open_events.json?'
-    for free_time in free_times:
-        meetup_start = datetime.datetime.strptime(free_time.free_time_start, '%Y-%m-%dT%H:%M:%S-07:00')
-        meetup_end = datetime.datetime.strptime(free_time.free_time_end, '%Y-%m-%dT%H:%M:%S-07:00')
+    start_time = free_times.first().free_time_start
+    end_time = free_times.last().free_time_end
+    meetup_start = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S-08:00')
+    meetup_end = datetime.datetime.strptime(end_time, '%Y-%m-%dT%H:%M:%S-08:00')
 
-        # Converts free times to unix time for Meetup Api
-        meetup_epoch_start=int(meetup_start.strftime('%s'))*1000
-        meetup_epoch_end=int(meetup_end.strftime('%s'))*1000
-        for interest in interests:
-            meetup_params = {
-                'key': meetup_key,
-                'zip': profile.zipcode,
-                'category': meetup_category[interest.interests],
-                'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
-                'page': 1
-            }
-            meetup_resp = get(url=meetup_url, params=meetup_params)
-            meetup_data = json.loads(meetup_resp.text)
+    # Converts free times to unix time for Meetup Api
+    meetup_epoch_start=int(meetup_start.strftime('%s'))*1000
+    meetup_epoch_end=int(meetup_end.strftime('%s'))*1000
+    for interest in interests:
+        meetup_params = {
+            'key': meetup_key,
+            'zip': profile.zipcode,
+            'radius': 25,
+            'category': meetup_category[interest.interests],
+            'time': '{},{}'.format(meetup_epoch_start, meetup_epoch_end),
+            'page': 1
+        }
+        meetup_resp = get(url=meetup_url, params=meetup_params)
+        meetup_data = json.loads(meetup_resp.text)
 
-            # Saves events returned from Meetup Api
-            for event in meetup_data['results']:
+        # Saves events returned from Meetup Api
+        for event in meetup_data['results']:
 
-                # Converts all times into strings and datetime objects from Unix time.
-                # Also adds a timezone to datetime objects
-                epoch_time = event['time']
-                start_dateTime_obj = datetime.datetime.fromtimestamp(epoch_time/1000)
-                start_dateTime = tz.localize(start_dateTime_obj)
-                start_time = start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+            # Converts all times into strings and datetime objects from Unix time.
+            # Also adds a timezone to datetime objects
+            epoch_time = event['time']
+            start_dateTime_obj = datetime.datetime.fromtimestamp(epoch_time/1000)
+            start_dateTime = tz.localize(start_dateTime_obj)
+            start_time = start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
 
-                #Checks if returned event has a duration
-                if event.get('duration'):
-                    end_time_epoch = event['time'] + event['duration']
-                    end_dateTime_obj = datetime.datetime.fromtimestamp(end_time_epoch/1000)
-                    end_dateTime = tz.localize(end_dateTime_obj)
-                    end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
-                else:
-                    end_dateTime = start_dateTime+relativedelta(hours=5)
-                    end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+            #Checks if returned event has a duration
+            if event.get('duration'):
+                end_time_epoch = event['time'] + event['duration']
+                end_dateTime_obj = datetime.datetime.fromtimestamp(end_time_epoch/1000)
+                end_dateTime = tz.localize(end_dateTime_obj)
+                end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
+            else:
+                end_dateTime = start_dateTime+relativedelta(hours=5)
+                end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-07:00')
 
-                #Checks if event has venue and description
-                if event.get('venue') and event.get('time') and event.get('name'):
-                    venue = event['venue']['name'] or event['venue']['city']
-                    if event.get('description'):
-                        description = event['description'] or None
-                        Event.objects.create(
-                            name=event['name'],
-                            category=interest.interests,
-                            venue=venue,
-                            description=description,
-                            latitude=event['venue']['lat'],
-                            longitude=event['venue']['lon'],
-                            start_time=start_time,
-                            end_time=end_time,
-                            picture='http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
-                            event_url=event['event_url'],
-                            user=request.user,
-                            start_dateTime=start_dateTime,
-                            end_dateTime=end_dateTime
-                    )
+            #Checks if event has venue and description
+            if event.get('venue') and event.get('time') and event.get('name'):
+                venue = event['venue']['name'] or event['venue']['city']
+                if event.get('description'):
+                    description = event['description'] or None
+                    Event.objects.create(
+                        name=event['name'],
+                        category=interest.interests,
+                        venue=venue,
+                        description=description,
+                        latitude=event['venue']['lat'],
+                        longitude=event['venue']['lon'],
+                        start_time=start_time,
+                        end_time=end_time,
+                        picture='http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
+                        event_url=event['event_url'],
+                        user=request.user,
+                        start_dateTime=start_dateTime,
+                        end_dateTime=end_dateTime
+                )
     success = {'success': 'success'}
     return HttpResponse(json.dumps(success), content_type="application/json")
 
