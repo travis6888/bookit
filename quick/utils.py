@@ -6,19 +6,7 @@ from oauth2client.client import AccessTokenCredentials
 __author__ = 'travis6888'
 
 
-def item_check(item, event):
-    if item is not None:
-        test = event['description']['text']
-        return test
-    if item is TypeError:
-        print "fuck"
 
-        return "THis is working"
-
-    else:
-        print "not working"
-        text = "This event has no description"
-        return text
 
 def sign_in_google(request):
     """User logs in through google using python social login. Once the user is logged in, google calendar information is

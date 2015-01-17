@@ -33,7 +33,7 @@ import sendgrid
 from pyzipcode import ZipCodeDatabase
 
 # Create your views here.
-from quick.utils import sign_in_google, item_check
+from quick.utils import sign_in_google
 
 
 def home(request):
@@ -62,7 +62,6 @@ def profile(request):
 
         #find todays date
         current_date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S-08:00')
-        print current_date
         real_current = datetime.datetime.strptime(current_date, '%Y-%m-%dT%H:%M:%S-08:00')
         #only allow freetimes for the next four weeks
         if next_event_start_dateTime <= real_current + datetime.timedelta(weeks=4):
@@ -111,7 +110,6 @@ def profile(request):
 
                     )})
         else:
-            print "out of range", curent_event_end_dateTime, next_event_start_dateTime
             pass
 
     # Deletes any duplicate free times in database for current user
@@ -129,7 +127,6 @@ def create_profile(request):
     user_social_auth = request.user.social_auth.filter(provider='google-oauth2').first()
     # access_token = user_social_auth.extra_data['access_token']
     calID=user_social_auth.uid
-    print calID
     if request.method == "POST":
         form = ProfileCreationForm(request.POST)
         if form.is_valid():
@@ -198,7 +195,6 @@ def eventbrite_api(request):
             datetime_end = dateutil.parser.parse(event['end']['utc'])
 
             if event['description'] is not None:
-                item = item_check(event['description']['text'], event)
 
                 Event.objects.bulk_create({Event(
                     name=event['name']['text'],
@@ -216,8 +212,21 @@ def eventbrite_api(request):
                     end_dateTime=datetime_end)}
                 )
             else:
-                print "broken"
-                pass
+                Event.objects.bulk_create({Event(
+                    name=event['name']['text'],
+                    category=interest.interests,
+                    venue=event['venue']['name'],
+                    description="No description",
+                    latitude=event['venue']['latitude'],
+                    longitude=event['venue']['longitude'],
+                    start_time=formatted_start,
+                    end_time=formatted_end,
+                    picture=event['logo_url'],
+                    event_url=event['url'],
+                    user=request.user,
+                    start_dateTime=datetime_start,
+                    end_dateTime=datetime_end)})
+
         success = {'success': eventbrite_data}
     return HttpResponse(json.dumps(success), content_type="application/json")
 
