@@ -288,7 +288,7 @@ def meetup_api(request):
             if event.get('duration'):
                 end_time_epoch = event['time'] + event['duration']
                 end_dateTime_obj = datetime.datetime.fromtimestamp(end_time_epoch/1000)
-                end_dateTime = tz.utc(end_dateTime_obj)
+                end_dateTime = tz.localize(end_dateTime_obj)
                 end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-08:00')
             else:
                 end_dateTime = start_dateTime+relativedelta(hours=5)
