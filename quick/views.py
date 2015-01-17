@@ -37,7 +37,8 @@ from quick.utils import sign_in_google, item_check
 
 
 def home(request):
-    return render(request, 'home.html')
+    form = ProfileCreationForm()
+    return render(request, 'home.html', {'form': form})
 
 
 def profile(request):
@@ -370,8 +371,9 @@ def matching(request):
 
 
     profile = Profile.objects.get(user=request.user)
+    form = ProfileCreationForm()
 
-    return render(request, 'matched.html', {'matched': matched_event, 'timezone': profile.timezone })
+    return render(request, 'matched.html', {'matched': matched_event, 'timezone': profile.timezone, 'form':form })
 
 
 """Posts event to users google calendar"""

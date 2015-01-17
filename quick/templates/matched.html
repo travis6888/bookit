@@ -233,22 +233,23 @@
             <div class="profileCreate">
                 <form class="profileForm" method="post" action="/edit_profile/">
                     {% csrf_token %}
-                    <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
-                                                              placeholder="Zipcode"/></p>
-
-                    <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"
-                                                                                             id="id_interests"
-                                                                                             name="interests">
-                    <option value="1">CAR</option>
-                    <option value="2">MUSIC</option>
-                    <option value="3">TECHNOLOGY</option>
-                    <option value="4">HIKING</option>
-                    <option value="5">BIKING</option>
-                    <option value="6">TRAIL</option>
-                    <option value="7">COMEDY</option>
-                    <option value="8">FOOD</option>
-                    <option value="9">SPORTS</option>
-                </select>
+                    {{ form.as_p }}
+{#                    <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"#}
+{#                                                              placeholder="Zipcode"/></p>#}
+{##}
+{#                    <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"#}
+{#                                                                                             id="id_interests"#}
+{#                                                                                             name="interests">#}
+{#                    <option value="1">CAR</option>#}
+{#                    <option value="2">MUSIC</option>#}
+{#                    <option value="3">TECHNOLOGY</option>#}
+{#                    <option value="4">HIKING</option>#}
+{#                    <option value="5">BIKING</option>#}
+{#                    <option value="6">TRAIL</option>#}
+{#                    <option value="7">COMEDY</option>#}
+{#                    <option value="8">FOOD</option>#}
+{#                    <option value="9">SPORTS</option>#}
+{#                </select>#}
 
                     <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
                 </form>

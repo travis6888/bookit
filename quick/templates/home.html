@@ -60,30 +60,32 @@
                 <div class="profileCreate">
                     <form  class="profileForm" method="post" action="/create_profile/">
                         {% csrf_token %}
-                        <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
-                                                                  placeholder="Zipcode"/></p>
+                                            {{ form.as_p }}
 
-                        <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"
-                                                                                                 id="id_interests"
-                                                                                                 name="interests">
-                        <option value="4">CAR</option>
-                        <option value="5">MUSIC</option>
-                        <option value="6">TECHNOLOGY</option>
-                        <option value="7">HIKING</option>
-                        <option value="8">BIKING</option>
-                        <option value="10">TRAIL</option>
-                        <option value="11">COMEDY</option>
-                        <option value="12">FOOD</option>
-                        <option value="13">SPORTS</option>
-                    </select>
-                        <br /><span class="helptext"> Hold down "Control", or "Command" on a Mac, to select more than one.</span>
-<tr><th><p><label for="id_timezone">Timezone:</label></th><td><select id="id_timezone" name="timezone">
-<option value="" selected="selected">---------</option>
-<option value="US/Pacific">US/Pacific</option>
-<option value="US/Central">US/Central</option>
-<option value="US/Eastern">US/Eastern</option>
-<option value="US/Mountain">US/Mountain</option>
-</select></td></tr></p>
+{#                        <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"#}
+{#                                                                  placeholder="Zipcode"/></p>#}
+{##}
+{#                        <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"#}
+{#                                                                                                 id="id_interests"#}
+{#                                                                                                 name="interests">#}
+{#                        <option value="4">CAR</option>#}
+{#                        <option value="5">MUSIC</option>#}
+{#                        <option value="6">TECHNOLOGY</option>#}
+{#                        <option value="7">HIKING</option>#}
+{#                        <option value="8">BIKING</option>#}
+{#                        <option value="10">TRAIL</option>#}
+{#                        <option value="11">COMEDY</option>#}
+{#                        <option value="12">FOOD</option>#}
+{#                        <option value="13">SPORTS</option>#}
+{#                    </select>#}
+{#                        <br /><span class="helptext"> Hold down "Control", or "Command" on a Mac, to select more than one.</span>#}
+{#<tr><th><p><label for="id_timezone">Timezone:</label></th><td><select id="id_timezone" name="timezone">#}
+{#<option value="" selected="selected">---------</option>#}
+{#<option value="US/Pacific">US/Pacific</option>#}
+{#<option value="US/Central">US/Central</option>#}
+{#<option value="US/Eastern">US/Eastern</option>#}
+{#<option value="US/Mountain">US/Mountain</option>#}
+{#</select></td></tr></p>#}
                         <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
                     </form>
                 </div>
