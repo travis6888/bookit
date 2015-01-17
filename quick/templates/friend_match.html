@@ -27,57 +27,59 @@
     </script>
 <body>
 <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top navieBar" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">BookIt</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navBAR-Home">
-                    <li>
-
-                <a href="{% url "match" %}">Events</a>
-                        </li>
+<nav class="navbar navbar-inverse navbar-fixed-top navieBar" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">BookIt</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navBAR-Home">
                 <li>
 
-                <a href data-toggle="modal" data-target=".bs-example-modal-sm">Edit Profile</a>
-                    </li>
+                    <a href="{% url "match" %}">Events</a>
+                </li>
+                <li>
+
+                    <a href data-toggle="modal" data-target=".bs-example-modal-sm">Edit Profile</a>
+                </li>
                 <li>
                     <a href="{% url 'friend_match' %}">Friends</a>
                 </li>
-                       <li>
-            <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite Friends</a>
-                     </li>
-                    <li>
+                <li>
+                    <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite
+                        Friends</a>
+                </li>
+                <li>
 
                     <a class="mapEvents">Map it</a>
 
                 </li>
-                      {% for key, values in matched.items %}
+                {% for key, values in matched.items %}
 
-            {% if values|length > 0 %}
-                <li>
-                    <a href="#{{ key }}">{{ key| lower| capfirst }}</a>
+                    {% if values|length > 0 %}
+                        <li>
+                            <a href="#{{ key }}">{{ key| lower| capfirst }}</a>
 
-                </li>
-            {% endif %}
-        {% endfor %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
 
 
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+            </ul>
         </div>
-        <!-- /.container -->
-    </nav>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
 
 
 <div class="modal fade invitedFriends-modal-sm" tabindex="-1" role="dialog" aria-labelledby="inviteSmallModalLabel"
@@ -89,10 +91,13 @@
 
 
             <form class="inviteForm text-center">
-                            <p>Separate Multiple Friends by Comma</p>
+                <p>Separate Multiple Friends by Comma</p>
 
                 <p><input class="friendEmail" type="text" placeholder="Enter Emails"></p>
-                <p><button class="inviteSubmit btn" type="submit">Invite!</button></p>
+
+                <p>
+                    <button class="inviteSubmit btn" type="submit">Invite!</button>
+                </p>
             </form>
         </div>
     </div>
@@ -101,171 +106,173 @@
 <div class="container event-content">
 
 
-        {% for key, values in matched.items %}
-            {% if values|length > 0 %}
-                   <!-- Title -->
-                <div class="row text-center">
-                    <div class="col-lg-12">
-                        <h3 id="{{ key }}" class="categoryHeader">{{ key| lower| capfirst }}</h3>
-                    </div>
+    {% for key, values in matched.items %}
+        {% if values|length > 0 %}
+            <!-- Title -->
+            <div class="row text-center">
+                <div class="col-lg-12">
+                    <h3 id="{{ key }}" class="categoryHeader">{{ key| lower| capfirst }}</h3>
                 </div>
-        <!-- /.row -->
-            {% endif %}
+            </div>
+            <!-- /.row -->
+        {% endif %}
 
         <!-- Page Features -->
-            {% if values|length > 0 %}
-        {% if key !=  "BIKING" and key != "HIKING" and key != "TRAIL" %}
-        <div class="row text-center {{ key }}">
-            {% for  event in values|slice:":4" %}
-            <div class="col-md-3 col-sm-6 hero-feature">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h4><a href="{{ event.event_url }}"> {{ event.name }}</a></h4>
-                        <p><em>Venue: {{ event.venue }}</em></p>
+        {% if values|length > 0 %}
+            {% if key !=  "BIKING" and key != "HIKING" and key != "TRAIL" %}
+                <div class="row text-center {{ key }}">
+                    {% for  event in values|slice:":4" %}
+                        <div class="col-md-3 col-sm-6 hero-feature">
+                            <div class="thumbnail">
+                                <div class="caption">
+                                    <h4><a href="{{ event.event_url }}"> {{ event.name }}</a></h4>
 
-                            <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
+                                    <p><em>Venue: {{ event.venue }}</em></p>
 
-                            <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }} - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
+                                    <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
+
+                                    <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }}
+                                        - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
 
 
-
-
-
+                                </div>
+                                <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
+                                <p class="bookedBtn">Booked</p>
                             </div>
-                    <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
-                    <p class="bookedBtn">Booked</p>
-                    </div>
-            </div>
-            {% endfor %}
-            {% if values|length > 4 %}
+                        </div>
+                    {% endfor %}
+                    {% if values|length > 4 %}
 
-                {% for  event in values|slice:"4:" %}
-            <div class="col-md-3 col-sm-6 hero-feature extra-events">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h4>{{ event.name }}</h4>
-                        <p><em>Venue: {{ event.venue }}</em></p>
+                        {% for  event in values|slice:"4:" %}
+                            <div class="col-md-3 col-sm-6 hero-feature extra-events">
+                                <div class="thumbnail">
+                                    <div class="caption">
+                                        <h4>{{ event.name }}</h4>
 
-                            <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
+                                        <p><em>Venue: {{ event.venue }}</em></p>
 
-                            <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }} - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
+                                        <h5>{{ event.start_dateTime| date:"DATE_FORMAT" }}</h5>
+
+                                        <h5>{{ event.start_dateTime|date:'TIME_FORMAT' }}
+                                            - {{ event.end_dateTime| date:"TIME_FORMAT" }}</h5>
 
 
-                            <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
+                                        <button class="btn btn-primary bookit" data-id="{{ event.id }}">BookIt</button>
 
-                            <p class="bookedBtn">Booked</p>
+                                        <p class="bookedBtn">Booked</p>
+                                    </div>
+                                </div>
                             </div>
-                    </div>
-            </div>
 
-            {% endfor %}
-             <div class="row text-center">
-                <div class="col-md-12">
-                    <button class="btn seeMore">More Events</button>
+                        {% endfor %}
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <button class="btn seeMore">More Events</button>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    {% endif %}
+                    {#        <hr>#}
                 </div>
 
-            </div>
+            {% else %}
+                <div class="row text-center {{ key }}">
+                    {% for  event in values|slice:":4" %}
+                        <div class="col-md-3 col-sm-6 hero-feature">
+                            <div class="thumbnail thumbnail2">
+                                <div class="caption">
+                                    <h4>{{ event.name }}</h4>
+
+                                    <p><em>Venue: {{ event.venue }}</em></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% if values|length > 4 %}
+                        {% for  event in values|slice:"4:" %}
+                            <div class="col-md-3 col-sm-6 hero-feature extra-events">
+                                <div class="thumbnail thumbnail2">
+                                    <div class="caption">
+                                        <h4>{{ event.name }}</h4>
+
+                                        <p><em>Venue: {{ event.venue }}</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <button class="btn seeMore">More Events</button>
+                            </div>
 
 
+                        </div>
 
+                    {% endif %}
+
+
+                </div>
 
 
             {% endif %}
-{#        <hr>#}
-            </div>
-
-          {% else %}
-            <div class="row text-center {{ key }}">
-            {% for  event in values|slice:":4" %}
-            <div class="col-md-3 col-sm-6 hero-feature">
-                <div class="thumbnail thumbnail2">
-                    <div class="caption">
-                        <h4>{{ event.name }}</h4>
-                        <p><em>Venue: {{ event.venue }}</em></p>
-                    </div>
-                    </div>
-                </div>
-            {% endfor %}
-            {% if values|length > 4 %}
-                {% for  event in values|slice:"4:" %}
-            <div class="col-md-3 col-sm-6 hero-feature extra-events">
-                <div class="thumbnail thumbnail2">
-                    <div class="caption">
-                        <h4>{{ event.name }}</h4>
-                        <p><em>Venue: {{ event.venue }}</em></p>
-                    </div>
-                    </div>
-                </div>
-            {% endfor %}
-               <div class="row text-center">
-                <div class="col-md-12">
-                    <button class="btn seeMore">More Events</button>
-                </div>
+            <hr>
 
 
-            </div>
+        {% endif %}
 
-            {% endif %}
-
-
-            </div>
-
-
-          {% endif %}
-           <hr>
-
-
-          {% endif %}
-
-         {% endfor %}
+    {% endfor %}
 
 </div>
 
 <div class="container map-container">
     <div class="row">
         <div class="col-lg-12">
-        <section id="contact" class="map">
-            <div id="map-canvas"></div>
-        </section>
+            <section id="contact" class="map">
+                <div id="map-canvas"></div>
+            </section>
         </div>
     </div>
 </div>
 
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content profileEditModal">
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content profileEditModal">
 
 
-                <h3 class="profileHead text-center">Edit Your Profile</h3>
+            <h3 class="profileHead text-center">Edit Your Profile</h3>
 
-                <div class="profileCreate">
-                    <form  class="profileForm" method="post" action="/edit_profile/">
-                        {% csrf_token %}
-                        <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
-                                                                  placeholder="Zipcode"/></p>
+            <div class="profileCreate">
+                <form class="profileForm" method="post" action="/edit_profile/">
+                    {% csrf_token %}
+                    <p><label for="id_zipcode"></label><input id="id_zipcode" name="zipcode" type="number"
+                                                              placeholder="Zipcode"/></p>
 
-                        <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"
-                                                                                                 id="id_interests"
-                                                                                                 name="interests">
-                        <option value="1">CAR</option>
-                        <option value="2">MUSIC</option>
-                        <option value="3">TECHNOLOGY</option>
-                        <option value="4">HIKING</option>
-                        <option value="5">BIKING</option>
-                        <option value="6">TRAIL</option>
-                        <option value="7">COMEDY</option>
-                        <option value="8">FOOD</option>
-                        <option value="9">SPORTS</option>
-                    </select>
-                        <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
-                    </form>
-                </div>
+                    <p><label for="id_interests">Pick Multiple Interests:</label></p><select multiple="multiple"
+                                                                                             id="id_interests"
+                                                                                             name="interests">
+                    <option value="1">CAR</option>
+                    <option value="2">MUSIC</option>
+                    <option value="3">TECHNOLOGY</option>
+                    <option value="4">HIKING</option>
+                    <option value="5">BIKING</option>
+                    <option value="6">TRAIL</option>
+                    <option value="7">COMEDY</option>
+                    <option value="8">FOOD</option>
+                    <option value="9">SPORTS</option>
+                </select>
+
+                    <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
+                </form>
             </div>
         </div>
     </div>
-
-
+</div>
 
 
 <script>
@@ -274,22 +281,22 @@
     var geocoder;
     var lat = '';
     var lng = '';
-    function codeAddress(){
+    function codeAddress() {
         {% with user.profile.all|first as profile %}
-        var zipcode = {{profile.zipcode}};
+            var zipcode = {{profile.zipcode}};
         {% endwith %}
 
-       geocoder.geocode({'address': String(zipcode)}, function(results, status){
-        if (status == google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-            lat = results[0].geometry.location.lat();
-            lng = results[0].geometry.location.lng();
+        geocoder.geocode({'address': String(zipcode)}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                lat = results[0].geometry.location.lat();
+                lng = results[0].geometry.location.lng();
 
-        }
-        else{
-            alert("geocode didnt work" + status)
-        }
-    });
+            }
+            else {
+                alert("geocode didnt work" + status)
+            }
+        });
 
     }
 
@@ -297,7 +304,7 @@
     function initialize() {
         var mapDiv = document.getElementById('map-canvas');
         map = new google.maps.Map(mapDiv, {
-{#            center: new google.maps.LatLng(lat, lng),#}
+            {#            center: new google.maps.LatLng(lat, lng),#}
             zoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
