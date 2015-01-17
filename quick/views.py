@@ -17,7 +17,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 # Import Models/Forms
-from bookit.secrets.passwords import eventbrite_token, meetup_key, outdoor_key, developer_key
+from bookit.flashtrade_directory.flashtrade import eventbrite_token, meetup_key, outdoor_key, developer_key
 from quick.forms import ProfileCreationForm
 from quick.models import Profile, FreeTimes, Event, Friend
 

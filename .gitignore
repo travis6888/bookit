@@ -51,5 +51,5 @@ docs/_build/
 .idea
 .pyc
 #local_settings.py
-bookit/secrets
+#bookit/flashtrade_directory
 
