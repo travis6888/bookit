@@ -283,11 +283,12 @@ def meetup_api(request):
             start_dateTime = tz.localize(start_dateTime_obj)
             start_time = start_dateTime.strftime('%Y-%m-%dT%H:%M:%S-08:00')
 
+
             #Checks if returned event has a duration
             if event.get('duration'):
                 end_time_epoch = event['time'] + event['duration']
                 end_dateTime_obj = datetime.datetime.fromtimestamp(end_time_epoch/1000)
-                end_dateTime = tz.localize(end_dateTime_obj)
+                end_dateTime = tz.utc(end_dateTime_obj)
                 end_time=end_dateTime.strftime('%Y-%m-%dT%H:%M:%S-08:00')
             else:
                 end_dateTime = start_dateTime+relativedelta(hours=5)
@@ -298,7 +299,7 @@ def meetup_api(request):
                 venue = event['venue']['name'] or event['venue']['city']
                 if event.get('description'):
                     description = event['description'] or None
-                    Event.objects.create(
+                    Event.objects.bulk_create({Event(
                         name=event['name'],
                         category=interest.interests,
                         venue=venue,
@@ -310,8 +311,8 @@ def meetup_api(request):
                         picture='http://img2.meetupstatic.com/img/8308650022681532654/header/logo-2x.png',
                         event_url=event['event_url'],
                         user=request.user,
-                        start_dateTime=start_dateTime,
-                        end_dateTime=end_dateTime
+                        start_dateTime=start_dateTime_obj,
+                        end_dateTime=end_dateTime_obj)}
                 )
     success = {'success': 'success'}
     return HttpResponse(json.dumps(success), content_type="application/json")
