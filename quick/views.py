@@ -359,10 +359,13 @@ def matching(request):
         if event_delete.filter(name=row.name).count() > 1:
             row.delete()
     # Deletes any events that have already happened
-    # for row in event_delete:
-    #     now = datetime.datetime.now()
-    #     if event_delete.filter(end_dateTime__lte=now):
-    #         row.delete()
+    for row in event_delete:
+        now = datetime.datetime.now()
+        if row.start_dateTime is not None and row.end_dateTime is not None:
+            if event_delete.filter(start_dateTime__lte=now):
+                row.delete()
+        else:
+            pass
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
 
