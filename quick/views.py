@@ -360,12 +360,14 @@ def matching(request):
             row.delete()
     # Deletes any events that have already happened
     for row in event_delete:
-        now = datetime.datetime.now()
-        if row.start_dateTime is not None and row.end_dateTime is not None:
-            if event_delete.filter(start_dateTime__lte=now):
-                row.delete()
-        else:
-            pass
+        now = datetime.date.today()
+        if event_delete.exclude(end_dateTime__Null=True):
+            if row.start_dateTime is not None and row.end_dateTime is not None:
+                if event_delete.filter(start_dateTime__lte=now):
+                    row.delete()
+            else:
+                pass
+
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
 
