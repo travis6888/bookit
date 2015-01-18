@@ -17,7 +17,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 # Import Models/Forms
-from bookit.flashtrade_directory.flashtrade import eventbrite_token, meetup_key, outdoor_key, developer_key
+from bookit.flashtrader_directory.flashtrade import eventbrite_token, meetup_key, outdoor_key, developer_key, \
+    sendgrid_key, sendgrid_login
 from quick.forms import ProfileCreationForm
 from quick.models import Profile, FreeTimes, Event, Friend
 
@@ -469,7 +470,7 @@ def invite_friends(request):
         for friend in friends:
             Friend.objects.create(user=request.user, email=friend)
             print friend
-            sg = sendgrid.SendGridClient('travis6888', 'travis88')
+            sg = sendgrid.SendGridClient(sendgrid_login, sendgrid_key)
 
             message = sendgrid.Mail()
             message.add_to(friend)

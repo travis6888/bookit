@@ -2,6 +2,7 @@ import datetime
 from googleapiclient.discovery import build
 import httplib2
 from oauth2client.client import AccessTokenCredentials
+from bookit.flashtrader_directory.flashtrade import developer_key
 
 __author__ = 'travis6888'
 
@@ -21,7 +22,7 @@ def sign_in_google(request):
     http = credentials.authorize(http)
 
     # Builds service for google calendar
-    service = build(serviceName='calendar', version='v3', http=http, developerKey='HFs_k7g6ml38NKohwrzfi_ii')
+    service = build(serviceName='calendar', version='v3', http=http, developerKey=developer_key)
     current_datetime = datetime.datetime.now().isoformat()[:-3] + 'Z'
     calendar2 = service.events().list(calendarId=calID, timeMin=current_datetime, singleEvents=True,
                                       orderBy='startTime').execute()
