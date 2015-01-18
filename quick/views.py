@@ -355,18 +355,21 @@ of their free times"""
 def matching(request):
     # Deletes any duplicate events from database for that specific user
     event_delete = Event.objects.filter(user=request.user)
+    event_past_delete = Event.objects.filter(start_dateTime__lte=datetime.datetime.now())
     for row in event_delete:
         if event_delete.filter(name=row.name).count() > 1:
             row.delete()
+    for row in event_past_delete:
+        row.delete()
     # Deletes any events that have already happened
-    for row in event_delete:
-        now = datetime.date.today()
-        if event_delete.exclude(end_dateTime__isnull=True):
-            if row.start_dateTime is not None and row.end_dateTime is not None:
-                if event_delete.filter(start_dateTime__lte=now):
-                    row.delete()
-            else:
-                pass
+    # for row in event_delete:
+    #     now = datetime.date.today()
+    #     if event_delete.exclude(end_dateTime__isnull=True):
+    #         if row.start_dateTime is not None and row.end_dateTime is not None:
+    #             if event_delete.filter(start_dateTime__lte=now):
+    #                 row.delete()
+    #         else:
+    #             pass
 
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
