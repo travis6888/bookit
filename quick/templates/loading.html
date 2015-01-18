@@ -1,29 +1,28 @@
-
 {% extends 'home.html' %}
 {% load staticfiles %}
-    {% block extraheader %}
-            <script src="{% static 'js/loading.js' %}"></script>
+{% block extraheader %}
+    <script src="{% static 'js/loading.js' %}"></script>
 
-    {% endblock extraheader %}
+{% endblock extraheader %}
 {% block content %}
- <div class="center">
-    <div class="bouncywrap">
+    <div class="center">
+        <div class="bouncywrap">
 
-        <div class="dotcon dc1">
-        <div class="dot"></div>
+            <div class="dotcon dc1">
+                <div class="dot"></div>
+            </div>
+
+            <div class="dotcon dc2">
+                <div class="dot"></div>
+            </div>
+
+            <div class="dotcon dc3">
+                <div class="dot"></div>
+            </div>
+
         </div>
-
-        <div class="dotcon dc2">
-        <div class="dot"></div>
-        </div>
-
-        <div class="dotcon dc3">
-        <div class="dot"></div>
-        </div>
-
-    </div>
     </div>
     <div class="loadingText ">
 
     </div>
-   {% endblock %}
+{% endblock %}

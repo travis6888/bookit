@@ -10,7 +10,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 from bookit.secrets.passwords import oauth_key, oauth_secret
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -97,13 +99,13 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'America/Vancouver'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-# USE_TZ = True
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
