@@ -518,5 +518,17 @@ def twillo(request):
     return render(request, 'twillo.html')
 
 
+def business_match(request):
+    business_free_times = FreeTimes.objects.filter(user=request.user)
+    free_time_dict = {}
+    for free_time in business_free_times:
+        bus_free_start = free_time.free_start_dateTime
+        bus_free_end = free_time.free_end_dateTime
+        users_free_times = FreeTimes.objects.filter(free_start_dateTime__gte=bus_free_start).filter(free_end_dateTime__lte=bus_free_end)
+        for user in users_free_times:
+            free_time_dict[user.user] = {'start': user.free_start_dateTime, 'end': user.free_end_dateTime}
+
+    return render(request, 'business_match.html', free_time_dict)
+
 
 

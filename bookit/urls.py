@@ -29,6 +29,8 @@ urlpatterns = patterns('',
     url(r'^add_friend/$', 'quick.views.add_friend', name='add_friend'),
     url(r'^edit_profile/$', 'quick.views.edit_profile', name='edit_profile'),
     url(r'^twillo/$', 'quick.views.twillo', name='twillo'),
+    url(r'^business/$', 'quick.views.business_match', name='business'),
+    
 
 
 
