@@ -521,12 +521,17 @@ def twillo(request):
 def business_match(request):
     business_free_times = FreeTimes.objects.filter(user=request.user)
     free_time_dict = {}
+    freetime_start_list = []
+    free_time_end_list = []
     for free_time in business_free_times:
         bus_free_start = free_time.free_start_dateTime
         bus_free_end = free_time.free_end_dateTime
         users_free_times = FreeTimes.objects.filter(free_start_dateTime__gte=bus_free_start).filter(free_end_dateTime__lte=bus_free_end)
-        for user in users_free_times:
-            free_time_dict[user.user] = {'start': user.free_start_dateTime, 'end': user.free_end_dateTime}
+        print users_free_times
+        for user2 in users_free_times:
+            freetime_start_list.append(user2.free_start_dateTime)
+            free_time_end_list.append(user2.free_end_dateTime)
+    free_time_dict['travis'] = {'start': freetime_start_list, 'end': free_time_end_list}
 
     return render(request, 'business_match.html', free_time_dict)
 

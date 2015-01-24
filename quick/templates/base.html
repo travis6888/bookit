@@ -1,0 +1,78 @@
+{% load staticfiles %}
+{% load tz %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!--jQuery files-->
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+
+    <!--bootstrap js file-->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+
+
+    <!--bootstrap css-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+    <!--CSS files-->
+    <link href="{% static 'css/match.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+
+    <!--js files-->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!--Loads google maps-->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmXQO4kik_QT8QPmzZ2_teiGUak9t1rQc">
+    </script>
+{% block content %}
+
+    {% timezone timezone %}
+        <body>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top navieBar" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'home' %}">BookIt</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navBAR-Home">
+                        <li>
+                            <a href="{% url "match" %}">Events</a>
+                        </li>
+                        <li>
+                            <a href data-toggle="modal" data-target=".bs-example-modal-sm">Edit Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'friend_match' %}">Friends</a>
+                        </li>
+                        <li>
+                            <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite
+                                Friends</a>
+                        </li>
+                        <li>
+                            <a class="mapEvents">Map it</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+{% endtimezone %}
+{% endblock %}
+

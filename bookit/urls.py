@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     url(r'^edit_profile/$', 'quick.views.edit_profile', name='edit_profile'),
     url(r'^twillo/$', 'quick.views.twillo', name='twillo'),
     url(r'^business/$', 'quick.views.business_match', name='business'),
-    
+
 
 
 

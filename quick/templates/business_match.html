@@ -1,8 +1,15 @@
-{% extends 'matched.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
 
+
 {% block content %}
+    <body>
+{{ travis }}
 
-
-
+    {% for key, values in travis %}
+{{ key }}
+        {{ values }}
+    {% endfor %}
+    <h3>for test</h3>
+    </body>
 {% endblock %}
