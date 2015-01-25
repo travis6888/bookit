@@ -363,14 +363,14 @@ def matching(request):
     for row in event_past_delete:
         row.delete()
     # Deletes any events that have already happened
-    # for row in event_delete:
-    #     now = datetime.date.today()
-    #     if event_delete.exclude(end_dateTime__isnull=True):
-    #         if row.start_dateTime is not None and row.end_dateTime is not None:
-    #             if event_delete.filter(start_dateTime__lte=now):
-    #                 row.delete()
-    #         else:
-    #             pass
+    for row in event_delete:
+        now = datetime.date.today()
+        if event_delete.exclude(end_dateTime__isnull=True):
+            if row.start_dateTime is not None and row.end_dateTime is not None:
+                if event_delete.filter(start_dateTime__lte=now):
+                    row.delete()
+            else:
+                pass
 
     free_times = FreeTimes.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user).distinct()
@@ -521,17 +521,19 @@ def twillo(request):
 def business_match(request):
     business_free_times = FreeTimes.objects.filter(user=request.user)
     free_time_dict = {}
-    freetime_start_list = []
-    free_time_end_list = []
+    userdict = {}
+    list_users_info = []
+    list = []
+
     for free_time in business_free_times:
         bus_free_start = free_time.free_start_dateTime
         bus_free_end = free_time.free_end_dateTime
         users_free_times = FreeTimes.objects.filter(free_start_dateTime__gte=bus_free_start).filter(free_end_dateTime__lte=bus_free_end)
         print users_free_times
         for user2 in users_free_times:
-            freetime_start_list.append(user2.free_start_dateTime)
-            free_time_end_list.append(user2.free_end_dateTime)
-    free_time_dict['travis'] = {'start': freetime_start_list, 'end': free_time_end_list}
+            list.append(user2)
+            userdict[user2.user] = list
+    free_time_dict['info'] = userdict
 
     return render(request, 'business_match.html', free_time_dict)
 

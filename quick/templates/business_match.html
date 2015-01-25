@@ -4,11 +4,15 @@
 
 {% block content %}
     <body>
-{{ travis }}
 
-    {% for key, values in travis %}
+{% for key, values in info.items %}{{ key }}
 {{ key }}
-        {{ values }}
+{#    {{ values }}#}
+    {% for time in values.values %}
+{#        {{ time }}#}
+{#        {{ i }}#}
+        {{ time.end_dateTime| date:'TIME_FORMAT'  }}
+        {% endfor %}
     {% endfor %}
     <h3>for test</h3>
     </body>
