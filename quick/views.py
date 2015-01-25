@@ -520,19 +520,18 @@ def twillo(request):
 
 def business_match(request):
     business_free_times = FreeTimes.objects.filter(user=request.user)
-    free_time_dict = {}
+    profile = Profile.objects.get(user=request.user)
+    free_time_dict = {'timezone': profile.timezone}
     userdict = {}
-    list_users_info = []
-    list = []
-
+    list_free_time = []
     for free_time in business_free_times:
         bus_free_start = free_time.free_start_dateTime
         bus_free_end = free_time.free_end_dateTime
         users_free_times = FreeTimes.objects.filter(free_start_dateTime__gte=bus_free_start).filter(free_end_dateTime__lte=bus_free_end)
-        print users_free_times
         for user2 in users_free_times:
-            list.append(user2)
-            userdict[user2.user] = list
+            # if user2 not in userdict[user2.user]:
+            list_free_time.append(user2)
+            userdict[user2.user] = list_free_time
     free_time_dict['info'] = userdict
 
     return render(request, 'business_match.html', free_time_dict)
