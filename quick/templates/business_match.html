@@ -48,8 +48,14 @@
         <div class="container event-content">
 
 {% for key, values in info.items %}
+    <div class="row text-center">
+                        <div class="col-lg-12">
+                            <h3 id="{{ key }}" class="categoryHeader">{{ key| lower| capfirst }}</h3>
+                        </div>
+                    </div>
+            <div class="row text-center {{ key }}">
+
     {% for free_time in values %}
-        <div class="row text-center {{ key }}">
                                 <div class="col-md-3 col-sm-6 hero-feature">
                                     <div class="thumbnail">
                                         <div class="caption">
@@ -66,9 +72,10 @@
                                         <button class="btn btn-primary businessContact" data-id="{{ free_time.id }}">Contact User</button>
                                     </div>
                                 </div>
-        </div>
-        </div>
         {% endfor %}
+            </div>
+        </div>
+
     {% endfor %}
     {% endtimezone %}
     </body>
