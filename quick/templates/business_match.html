@@ -24,42 +24,39 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navBAR-Home">
                         <li>
-                            <a href="{% url "match" %}">Events</a>
+                            <a href="{% url 'match' %}">Event Match</a>
                         </li>
-                        <li>
-                            <a href data-toggle="modal" data-target=".bs-example-modal-sm">Edit Profile</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'friend_match' %}">Friends</a>
-                        </li>
-                        <li>
-                            <a href="#inviteFriend" data-toggle="modal" data-target=".invitedFriends-modal-sm">Invite
-                                Friends</a>
-                        </li>
-                        <li>
-                            <a class="mapEvents">Map it</a>
-                        </li>
+
+
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
             </div>
             <!-- /.container -->
         </nav>
-        <div class="container event-content">
 
+        <!--Matched Events-->
+        <div class="container event-content">
             {% for key, values in info.items %}
-                <div class="row text-center">
-                    <div class="col-lg-12">
-                        <h3 id="{{ key }}" class="categoryHeader">{{ key| lower| capfirst }}</h3>
+                {% if values|length > 0 %}
+                    <!-- Interests as title -->
+                    <div class="row text-center">
+                        <div class="col-lg-12">
+                            <h3 id="{{ key }}" class="categoryHeader">{{ key| lower| capfirst }}</h3>
+                        </div>
                     </div>
-                </div>
-                <div class="row text-center {{ key }}">
-                    {% if values|length > 4 %}
-                        {% for free_time in values|slice:"4:" %}
+                    <!-- /.row -->
+                {% endif %}
+
+                <!-- Individual Events -->
+                {% if values|length > 0 %}
+
+                    <div class="row text-center {{ key }}">
+                        {% for  free_time in values|slice:":4" %}
                             <div class="col-md-3 col-sm-6 hero-feature">
                                 <div class="thumbnail">
                                     <div class="caption">
-                                        <h4> {{ event.user }}</h4>
+                                        <h4> {{ free_time.user }}</h4>
 
 
                                         <h5>{{ free_time.free_start_dateTime| date:"DATE_FORMAT" }}</h5>
@@ -69,32 +66,57 @@
 
 
                                     </div>
-                                    <button class="btn btn-primary businessContact" data-id="{{ free_time.id }}">Contact
-                                        User
-                                    </button>
+                                    <button class="btn btn-primary bookit" data-id="{{ free_time.id }}">BookIt</button>
+                                    <p class="bookedBtn">Booked</p>
                                 </div>
-                                                    </div>
-
+                            </div>
                         {% endfor %}
-                        <div class="row text-center">
-                            <div class="col-md-12">
-                                <button class="btn seeMore">More Events</button>
+                        {% if values|length > 4 %}
+
+                            {% for  free_time in values|slice:"4:" %}
+                                <div class="col-md-3 col-sm-6 hero-feature extra-events">
+                                    <div class="thumbnail">
+                                        <div class="caption">
+                                            <h4>{{ free_time.user }}</h4>
+
+
+                                            <h5>{{ free_time.free_start_dateTime| date:"DATE_FORMAT" }}</h5>
+
+                                            <h5>{{ free_time.free_start_dateTime|date:'TIME_FORMAT' }}
+                                                - {{ free_time.free_end_dateTime| date:"TIME_FORMAT" }}</h5>
+
+
+                                            <button class="btn btn-primary bookit" data-id="{{ free_time.id }}">BookIt
+                                            </button>
+
+                                            <p class="bookedBtn">Booked</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                    <button class="btn seeMore">More Events</button>
+                                </div>
+
                             </div>
 
-                        </div>
+                        {% endif %}
+                    </div>
 
-                        </div>
-                                    {% endif %}
+                    </div>
 
-                            </div>
+                    <hr>
+
+
+                {% endif %}
 
             {% endfor %}
 
-
-
-
+        </div>
+        </body>
 
     {% endtimezone %}
-    </body>
 
 {% endblock %}
