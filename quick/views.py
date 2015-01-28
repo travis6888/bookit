@@ -537,4 +537,12 @@ def business_match(request):
     return render(request, 'business_match.html', free_time_dict)
 
 
+def contact_user_email(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        find_user = User.objects.get(data.id)
+
+
+
+
 
