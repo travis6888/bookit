@@ -544,5 +544,6 @@ def contact_user_email(request):
 
 
 
-
+def business_home(request):
+    return render(request, 'business_home.html')
 

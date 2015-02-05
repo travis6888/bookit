@@ -1,0 +1,78 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!--jquery files-->
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+
+    <!--bootstrap js file-->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/business.js' %}"></script>
+
+    <!--bootstrap css-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!--CSS files-->
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+
+
+    {% block extraheader %}
+    {% endblock extraheader %}
+</head>
+<body>
+
+{% block content %}
+    <header id="top" class="header">
+        <div class="text-vertical-center">
+            <div class="homePage container-fluid">
+                <div class="homeText">
+                    <h1><em>BookIt</em></h1>
+
+                    <h3>Welcome to the business side! Find customers that fill your schedule!</h3>
+                    <br>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn btn-lg homeBtn">Google
+                            Login</a>
+                    {% elif user.profile.count == 1 %}
+                        <button class="loadEvents btn btn btn-lg businessGetTimes">Find empty spots in your schedule</button>
+                    {% else %}
+                        <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">
+                            Create
+                            Profile
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content profileModal">
+
+
+                <h3 class="profileHead text-center">Create Your Profile</h3>
+
+                <div class="profileCreate">
+                    <form class="profileForm" method="post" action="/create_profile/">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+
+                        <p><input class="btn btn-primary profileCreateBtn" type="submit" value="Submit"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+</body>
+
+</html>
