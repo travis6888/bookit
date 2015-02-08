@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'bookit.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^$', 'quick.views.home', name='home'),
+    url(r'^user_login/$', 'quick.views.home', name='home'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': 'home'}, name='logout'),
 
     url(r'^admin/', include(admin.site.urls)),
@@ -31,6 +31,8 @@ urlpatterns = patterns('',
     url(r'^twillo/$', 'quick.views.twillo', name='twillo'),
     url(r'^business_match/$', 'quick.views.business_match', name='business_match'),
     url(r'^business/$', 'quick.views.business_home', name='business'),
+    url(r'^$', 'quick.views.landing', name='landing'),
+    url(r'^loading_business/$', 'quick.views.business_loading', name='loading_business'),
 
 
 

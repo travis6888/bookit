@@ -543,7 +543,15 @@ def contact_user_email(request):
         find_user = User.objects.get(data.id)
 
 
-
 def business_home(request):
     return render(request, 'business_home.html')
+
+
+def business_loading(request):
+    return render(request, 'loading_business.html')
+
+
+def landing(request):
+    return render(request, 'landing.html')
+
 
