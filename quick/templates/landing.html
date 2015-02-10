@@ -24,27 +24,7 @@
 <body>
 
 {% block content %}
-<div class="container">
 
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Welcome to bookit! We match events to your schedule!</h2>
-        </div>
-        <div class="col-md-6">
-            <h1> Businesses</h1>
-            <h4>We are here to help you. We know what it is like to watch unused appointments go to waste. Those are valuable
-            spots! We can help you fill those spots. We will find the best customers for you!</h4>
-            <button class="btn btn-lg btn homeBtn"><a href="{% url 'business' %}"> Learn More</a></button>
-
-        </div>
-        <div class="col-md-6">
-            <h1>Users</h1>
-            <h4> We are here to take the pain out of finding fun things to do! No more checking your calendar
-            after you find something interesting! We do it for you! Grab events that only fit your schedule! </h4>
-        <button class="homeBtn btn btn-lg" ><a href="{% url 'home' %}"> Get Started Now!</a></button>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 </body>

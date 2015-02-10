@@ -123,4 +123,19 @@ $(document).ready(function () {
 
         });
     });
+
+    $(".busButton").on('click', function (){
+            $('.landing').hide();
+            $('.business').show();
+        });
+
+    $(".userButton").on('click', function(){
+                    $('.landing').hide();
+            $('.user').show();
+
+    });
+    $('.businessGetTimes').on('click', function(){
+       window.location.replace("/loading_business/");
+   });
+    
 });
