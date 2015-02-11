@@ -41,7 +41,7 @@ $(document).ready(function () {
 
 
 // Pulls the free time from user google calendar
-   profile = function() {
+    var profile = function() {
        $.ajax({
            url: '/profile/',
            dataType: 'json',
@@ -55,7 +55,7 @@ $(document).ready(function () {
        })
    };
 
-    mysuccess = function () {
+    var mysuccess = function () {
         // When 3 ajax calls are done, redirects to page with the results
         window.location.replace("/business_match/")
     };
