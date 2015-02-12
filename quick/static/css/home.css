@@ -360,6 +360,8 @@ html, body{
     text-align: center;
     vertical-align: middle;
     border-radius: 20px;
+        margin-top: 50px;
+
 }
 .homeText{
     color: #ffffff;
@@ -401,8 +403,25 @@ html, body{
     color: #000000;
 }
 .user{
+
     display: none;
+    padding: 25px;
+    width: 100%;
+    min-width: 350px;
+    max-width: 25%;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 20px;
 }
 .business{
     display: none;
+    padding: 25px;
+    width: 100%;
+    min-width: 350px;
+    max-width: 25%;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 20px;
 }
