@@ -524,6 +524,18 @@ def business_match(request):
     free_time_dict = {'timezone': profile.timezone}
     userdict = {}
     list_free_time = []
+
+    free_time_delete = FreeTimes.objects.all()
+
+      # Deletes any events that have already happened
+    for row in free_time_delete:
+        now = datetime.date.today()
+
+        if free_time_delete.filter(free_start_dateTime__lte=now):
+            row.delete()
+        else:
+            pass
+
     for free_time in business_free_times:
         bus_free_start = free_time.free_start_dateTime
         bus_free_end = free_time.free_end_dateTime
