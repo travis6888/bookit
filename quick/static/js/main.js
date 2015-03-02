@@ -138,4 +138,8 @@ $(document).ready(function () {
         window.location.replace("/loading_business/");
     });
 
+    $('.businessLogin').on('click', function() {
+        $('business2').show();
+    });
+
 });

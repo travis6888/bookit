@@ -8,23 +8,92 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Event.start_dateTime'
-        db.add_column(u'quick_event', 'start_dateTime',
-                      self.gf('django.db.models.fields.DateField')(null=True, blank=True),
-                      keep_default=False)
+        # Adding model 'Event'
+        db.create_table(u'quick_event', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=300, null=True, blank=True)),
+            ('category', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
+            ('venue', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
+            ('description', self.gf('django.db.models.fields.TextField')(max_length=8000, null=True, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(max_length=100, null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(max_length=100, null=True, blank=True)),
+            ('start_time', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('end_time', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+            ('event_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('start_dateTime', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('end_dateTime', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+        ))
+        db.send_create_signal(u'quick', ['Event'])
 
-        # Adding field 'Event.end_dateTime'
-        db.add_column(u'quick_event', 'end_dateTime',
-                      self.gf('django.db.models.fields.DateField')(null=True, blank=True),
-                      keep_default=False)
+        # Adding model 'Profile'
+        db.create_table(u'quick_profile', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='profile', null=True, to=orm['auth.User'])),
+            ('zipcode', self.gf('django.db.models.fields.IntegerField')(max_length=5, null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('timezone', self.gf('django.db.models.fields.CharField')(max_length=15, null=True, blank=True)),
+            ('business', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal(u'quick', ['Profile'])
+
+        # Adding M2M table for field interests on 'Profile'
+        m2m_table_name = db.shorten_name(u'quick_profile_interests')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('profile', models.ForeignKey(orm[u'quick.profile'], null=False)),
+            ('interest', models.ForeignKey(orm[u'quick.interest'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['profile_id', 'interest_id'])
+
+        # Adding model 'FreeTimes'
+        db.create_table(u'quick_freetimes', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('free_time_start', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('free_time_end', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('free_time_amount', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('previous_event', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
+            ('free_start_dateTime', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('free_end_dateTime', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+        ))
+        db.send_create_signal(u'quick', ['FreeTimes'])
+
+        # Adding model 'Friend'
+        db.create_table(u'quick_friend', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.CharField')(max_length=6000, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'quick', ['Friend'])
+
+        # Adding model 'Interest'
+        db.create_table(u'quick_interest', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('interests', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'quick', ['Interest'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Event.start_dateTime'
-        db.delete_column(u'quick_event', 'start_dateTime')
+        # Deleting model 'Event'
+        db.delete_table(u'quick_event')
 
-        # Deleting field 'Event.end_dateTime'
-        db.delete_column(u'quick_event', 'end_dateTime')
+        # Deleting model 'Profile'
+        db.delete_table(u'quick_profile')
+
+        # Removing M2M table for field interests on 'Profile'
+        db.delete_table(db.shorten_name(u'quick_profile_interests'))
+
+        # Deleting model 'FreeTimes'
+        db.delete_table(u'quick_freetimes')
+
+        # Deleting model 'Friend'
+        db.delete_table(u'quick_friend')
+
+        # Deleting model 'Interest'
+        db.delete_table(u'quick_interest')
 
 
     models = {
@@ -68,7 +137,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Event'},
             'category': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '8000', 'null': 'True', 'blank': 'True'}),
-            'end_dateTime': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'end_dateTime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'end_time': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'event_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -76,7 +145,7 @@ class Migration(SchemaMigration):
             'longitude': ('django.db.models.fields.FloatField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
             'picture': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'start_dateTime': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'start_dateTime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'start_time': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'venue': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
@@ -92,6 +161,12 @@ class Migration(SchemaMigration):
             'previous_event': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
+        u'quick.friend': {
+            'Meta': {'object_name': 'Friend'},
+            'email': ('django.db.models.fields.CharField', [], {'max_length': '6000', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'})
+        },
         u'quick.interest': {
             'Meta': {'object_name': 'Interest'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -99,11 +174,12 @@ class Migration(SchemaMigration):
         },
         u'quick.profile': {
             'Meta': {'object_name': 'Profile'},
+            'business': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'email': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'interests': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['quick.Interest']", 'null': 'True', 'blank': 'True'}),
-            'oauth_token': ('django.db.models.fields.CharField', [], {'max_length': '300', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'timezone': ('django.db.models.fields.CharField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'profile'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'zipcode': ('django.db.models.fields.IntegerField', [], {'max_length': '5', 'null': 'True', 'blank': 'True'})
         }
     }

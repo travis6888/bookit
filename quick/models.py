@@ -30,6 +30,7 @@ class Profile(models.Model):
     TIMEZONES = (('US/Pacific', 'US/Pacific'),('US/Central', 'US/Central'), ('US/Eastern', 'US/Eastern')
                  ,('US/Mountain', 'US/Mountain'))
     timezone = models.CharField(max_length=15, null=True, choices=TIMEZONES, blank=True)
+    business = models.BooleanField(default=False, blank=True)
 
     def __unicode__(self):
         return self.email

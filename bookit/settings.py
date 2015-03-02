@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'oauth2client',
     'oauthlib',
     'urllib3',
+    'social',
     'social.apps.django_app.default',
     'dateutil',
     'pytz',

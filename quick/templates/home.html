@@ -28,7 +28,7 @@
     <div class="contain user">
         <div class="text-vertical-center">
             <div class="homePage container-fluid">
-                <div class="homeText">
+                <div class="homeText user">
                     <h1><em>BookIt</em></h1>
 
                     <h3>Events that fit your schedule!</h3>
@@ -60,7 +60,7 @@
             <h1> Businesses</h1>
             <h4>We are here to help you. We know what it is like to watch unused appointments go to waste. Those are valuable
             spots! We can help you fill those spots. We will find the best customers for you!</h4>
-            <button class="btn btn-lg btn homeBtn busButton"> Learn More</button>
+            <button class="btn btn-lg btn  busButton"> Learn More</button>
 
         </div>
         <div class="col-md-6">
@@ -69,28 +69,28 @@
             after you find something interesting! We do it for you! Grab events that only fit your schedule! </h4>
         <button class="homeBtn btn btn-lg userButton" > Get Started Now!</button>
         </div>
-        {% elif user.profile.count == 1 %}
-              <div class="homePage">
-                        <button class="loadEvents btn btn btn-lg homeBtn">Get Events</button>
-        {% else %}
-                        <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">
-                            Create
-                            Profile
-                        </button>
-              </div>
+{#        {% elif user.profile.count == 1 %}#}
+{#              <div class="homePage businessButton">#}
+{#                        <button class="loadEvents btn btn btn-lg homeBtn">Get Events </button>#}
+{#        {% else %}#}
+{#                        <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">#}
+{#                            Create#}
+{#                            Profile#}
+{#                        </button>#}
+{#              </div>#}
                     {% endif %}
     </div>
 </div>
     <div class="container business">
         <div class="text-vertical-center">
             <div class="homePage container-fluid">
-                <div class="homeText">
+                <div class="homeText business">
                     <h1><em>BookIt</em></h1>
 
                     <h3>Welcome to the business side! Find customers that fill your schedule!</h3>
                     <br>
                     {% if not user.is_authenticated %}
-                        <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn btn-lg homeBtn">Google
+                        <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn btn-lg homeBtn business2">Google
                             Login</a>
                     {% elif user.profile.count == 1 %}
                         <button class="loadEvents btn btn btn-lg businessGetTimes">Find empty spots in your schedule</button>

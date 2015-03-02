@@ -404,7 +404,7 @@ html, body{
 }
 .user{
 
-    display: none;
+    /*display: none;*/
     padding: 25px;
     width: 100%;
     min-width: 350px;
@@ -415,7 +415,7 @@ html, body{
     border-radius: 20px;
 }
 .business{
-    display: none;
+    /*display: none;*/
     padding: 25px;
     width: 100%;
     min-width: 350px;
