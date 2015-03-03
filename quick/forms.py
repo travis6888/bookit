@@ -35,7 +35,4 @@ class EmailUserCreationForm(UserCreationForm):
 class ProfileCreationForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['oauth_token', 'email', 'user']
-
-
-
+        exclude = ['oauth_token', 'email', 'user', 'business']
