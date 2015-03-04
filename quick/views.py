@@ -38,7 +38,12 @@ from quick.utils import sign_in_google
 
 def home(request):
     form = ProfileCreationForm()
-    return render(request, 'home.html', {'form': form})
+    if request.user.is_authenticated():
+        profile2 = Profile.objects.get(user=request.user)
+    else:
+        profile2 = {'stuff': "styff"}
+        pass
+    return render(request, 'home.html', {'form': form, 'profile2': profile2 })
 
 
 def profile(request):
