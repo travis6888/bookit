@@ -25,30 +25,7 @@
 
 {% block content %}
     <header id="top" class="header">
-    <div class="contain user">
-        <div class="text-vertical-center">
-            <div class="homePage container-fluid">
-                <div class="homeText user">
-                    <h1><em>BookIt</em></h1>
 
-                    <h3>Events that fit your schedule!</h3>
-                    <br>
-                    {% if not user.is_authenticated %}
-                        <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn btn-lg homeBtn">Google
-                            Login</a>
-                    {% elif user.profile.count == 1 %}
-                        <button class="loadEvents btn btn btn-lg homeBtn">Get Events</button>
-                    {% else %}
-                        <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">
-                            Create
-                            Profile
-                        </button>
-                    {% endif %}
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="container landing">
 
     <div class="row">
@@ -69,15 +46,7 @@
             after you find something interesting! We do it for you! Grab events that only fit your schedule! </h4>
         <button class="homeBtn btn btn-lg userButton" > Get Started Now!</button>
         </div>
-{#        {% elif user.profile.count == 1 %}#}
-{#              <div class="homePage businessButton">#}
-{#                        <button class="loadEvents btn btn btn-lg homeBtn">Get Events </button>#}
-{#        {% else %}#}
-{#                        <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">#}
-{#                            Create#}
-{#                            Profile#}
-{#                        </button>#}
-{#              </div>#}
+
                     {% endif %}
     </div>
 </div>
@@ -92,8 +61,11 @@
                     {% if not user.is_authenticated %}
                         <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn btn-lg homeBtn business2">Google
                             Login</a>
+
                     {% elif user.profile.count == 1 and profile2.business %}
-                        <button class="loadEvents btn btn btn-lg businessGetTimes">Find empty spots in your schedule</button>
+                        <button class="btn btn btn-lg businessGetTimes homeBtn">Find empty spots in your schedule</button>
+                        {% elif user.profile.count == 1 %}
+                        <button class="loadEvents btn btn btn-lg homeBtn">Get Events</button>
                     {% else %}
                         <button class="btn btn btn-lg homeBtn" data-toggle="modal" data-target=".bs-example-modal-sm">
                             Create
