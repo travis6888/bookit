@@ -575,7 +575,4 @@ def business_loading(request):
     return render(request, 'loading_business.html')
 
 
-def landing(request):
-    return render(request, 'landing.html')
-
 
